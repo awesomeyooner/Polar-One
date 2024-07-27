@@ -53,6 +53,10 @@ def generate_launch_description():
     translator_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource('src/my_robot/launch/effort_translator.launch.py')
     )
+
+    camera_driver_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource('src/lane_detector/launch/camera_driver.launch.py')
+    )
     # component2_launch = IncludeLaunchDescription(
     #     PythonLaunchDescriptionSource('component2.launch.py')
     # )
@@ -67,6 +71,7 @@ def generate_launch_description():
 
         joystick_launch,
         translator_launch,
+        camera_driver_launch
 
         # component2_launch,
         # Add any additional launch files or actions here
