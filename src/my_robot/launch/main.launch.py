@@ -69,7 +69,7 @@ def generate_launch_description():
         joint_state_broadcaster_spawner,
         robot_bicycle_controller_spawner,
 
-        joystick_launch,
+        #joystick_launch,
         translator_launch,
         camera_driver_launch
 
