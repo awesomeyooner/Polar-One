@@ -1,7 +1,7 @@
 import numpy as np
 
 class ThresholdConstants:
-    LOWER_THRESHOLD = 150
+    LOWER_THRESHOLD = 200
     UPPER_THRESHOLD = 255
 
 class CannyConstants:

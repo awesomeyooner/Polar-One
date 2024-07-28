@@ -1,9 +1,7 @@
 import numpy as np
-import pandas as pd
 import cv2
-import Constants
-from Constants import *
-import Utility
+from lane_detector.detection_model.utils.Constants import *
+from lane_detector.detection_model.utils import Utility
 
 def region_selection(image):
 	# create an array of the same size as of the input image 
@@ -71,9 +69,9 @@ def draw_lines(image, lines, color=[255, 0, 0], thickness=12):
 	
 def get_slope_delta(frame):
 	
-	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+	#gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	
-	threshold = binary_threshold(gray)
+	threshold = binary_threshold(frame)
 	
 	edges = canny_frame(threshold)
 	

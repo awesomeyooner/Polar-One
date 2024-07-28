@@ -70,9 +70,10 @@ def get_best_fit(lines):
 
             sum_xy += (x1 * y1) + (x2 * y2)
             sum_x_squared += (x1 * x1) + (x2 * x2)
-
-    slope = ((n * sum_xy) - (sum_x * sum_y)) / ((n * sum_x_squared) - (sum_x * sum_x))
-    y_intercept = (sum_y - (slope * sum_x)) / n
+            
+    if ((n * sum_x_squared) - (sum_x * sum_x)) != 0:
+        slope = ((n * sum_xy) - (sum_x * sum_y)) / ((n * sum_x_squared) - (sum_x * sum_x))
+        y_intercept = (sum_y - (slope * sum_x)) / n
 
     return slope, y_intercept
 
