@@ -1,0 +1,46 @@
+import rclpy
+from rclpy.node import Node
+from sensor_msgs.msg import Image 
+from sensor_msgs.msg import CompressedImage
+from std_msgs.msg import Float64
+from cv_bridge import CvBridge
+import cv2 
+from lane_detector.detection_model.utils import Detector
+
+class LaneDetector(Node):
+
+    def __init__(self):
+        super().__init__('lane_detector')
+
+        self.frame_publisher = self.create_publisher(CompressedImage, 'detection/image_output', 10)
+        self.delta_publisher = self.create_publisher(Float64, 'detection/slope_delta', 10)
+
+        self.subscription = self.create_subscription(Image, 'image_raw', self.listener_callback, 10)
+
+        self.bridge = CvBridge()
+
+    def listener_callback(self, image):
+        frame = self.bridge.imgmsg_to_cv2(image)
+        
+        output_frame, slope_delta = Detector.get_slope_delta(frame)
+
+        compressed_output = self.bridge.cv2_to_compressed_imgmsg(output_frame, 'jpg')
+
+        self.frame_publisher.publish(compressed_output)
+        self.delta_publisher.publish(slope_delta)
+
+
+
+def main(args=None):
+    rclpy.init(args=args)
+
+    lane_detector = LaneDetector()
+
+    rclpy.spin(lane_detector)
+
+    lane_detector.destroy_node()
+
+    rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
