@@ -14,9 +14,9 @@ namespace MotorConstants{
 namespace ServoConstants{
   const std::string DEVICE = "virtual_front_wheel_joint";
 
-  const int MAX_LEFT = 510;
-  const int NEUTRAL = 375;
-  const int MAX_RIGHT = 240;
+  const int MAX_LEFT = 520;
+  const int NEUTRAL = 400;
+  const int MAX_RIGHT = 280;
 
   const int CHANNEL = 1;
 }

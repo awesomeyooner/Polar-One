@@ -118,11 +118,15 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_activate(const r
   RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "Activating ...please wait...");
   comms.connect(config.port, config.baud_rate, config.timeout_ms);
 
-  drive_motor.config_bound(TypeValue::LOWER_BOUND, MotorConstants::MAX_REVERSE);
-  drive_motor.config_bound(TypeValue::UPPER_BOUND, MotorConstants::MAX_FORWARD);
+  std::vector<ArduinoComms::ArduinoMessage> messages;
 
-  steer_motor.config_bound(TypeValue::LOWER_BOUND, ServoConstants::MAX_RIGHT);
-  steer_motor.config_bound(TypeValue::UPPER_BOUND, ServoConstants::MAX_LEFT);
+  messages.push_back(drive_motor.config_bound(TypeValue::LOWER_BOUND, MotorConstants::MAX_REVERSE));
+  messages.push_back(drive_motor.config_bound(TypeValue::UPPER_BOUND, MotorConstants::MAX_FORWARD));
+
+  messages.push_back(steer_motor.config_bound(TypeValue::LOWER_BOUND, ServoConstants::MAX_RIGHT));
+  messages.push_back(steer_motor.config_bound(TypeValue::UPPER_BOUND, ServoConstants::MAX_LEFT));
+
+  comms.send_message(messages); 
   
   RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "Successfully activated!");
 
