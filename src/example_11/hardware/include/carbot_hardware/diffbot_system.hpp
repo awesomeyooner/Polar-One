@@ -80,13 +80,13 @@ namespace carbot_hardware{
             if(message.device != device)
                 return;
 
-            if(message.message_type == ArduinoValue::STATUS && message.type_value == ArduinoValue::POSITION)
+            if(message.message_type == MessageType::STATUS && message.type_value == TypeValue::POSITION)
                 position = message.value;
             
-            else if(message.message_type == ArduinoValue::STATUS && message.type_value == ArduinoValue::VELOCITY)
+            else if(message.message_type == MessageType::STATUS && message.type_value == TypeValue::VELOCITY)
                 velocity = message.value;
 
-            if(message.message_type == ArduinoValue::CONTROL){
+            if(message.message_type == MessageType::CONTROL){
                 control_mode = message.type_value; //velocity or position or percent
                 control_value = message.value;
             }
@@ -95,12 +95,20 @@ namespace carbot_hardware{
         ArduinoComms::ArduinoMessage send_command(std::string mode, double value){
             return ArduinoComms::ArduinoMessage{
                 .device = device,
-                .message_type = ArduinoValue::CONTROL,
+                .message_type = MessageType::CONTROL,
                 .type_value = mode,
                 .value = value
             };
         }
         
+        ArduinoComms::ArduinoMessage config_bound(std::string type, double value){
+            return ArduinoComms::ArduinoMessage{
+                .device = device,
+                .message_type = MessageType::CONFIG,
+                .type_value = type,
+                .value = value
+            };
+        }
     };
 
     private:
