@@ -20,6 +20,10 @@ class Joystick : public rclcpp::Node
   //5 right trigger
     Joystick() : Node("teleop")
     {
+        this->declare_parameter("default_max", rclcpp::PARAMETER_DOUBLE);
+        this->declare_parameter("boost_amount", rclcpp::PARAMETER_DOUBLE);
+        this->declare_parameter("boost_toggle", rclcpp::PARAMETER_INTEGER);
+
         publisher = this->create_publisher<geometry_msgs::msg::TwistStamped>("cmd_vel", 10);
         subscription = this->create_subscription<sensor_msgs::msg::Joy>(
         "joy", 10, std::bind(&Joystick::topic_callback, this, _1));
