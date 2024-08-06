@@ -22,6 +22,8 @@ namespace TypeValue{
 
   constexpr char LOWER_BOUND[] = "lower_bound";
 
+  constexpr char NEUTRAL[] = "neutral";
+
   constexpr char UPPER_BOUND[] = "upper_bound";
 }
 
