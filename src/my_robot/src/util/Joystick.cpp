@@ -20,9 +20,9 @@ class Joystick : public rclcpp::Node
   //5 right trigger
     Joystick() : Node("teleop")
     {
-        this->declare_parameter("default_max", rclcpp::PARAMETER_DOUBLE);
-        this->declare_parameter("boost_amount", rclcpp::PARAMETER_DOUBLE);
-        this->declare_parameter("boost_toggle", rclcpp::PARAMETER_INTEGER);
+        this->declare_parameter<double>("default_max", 0.5);
+        this->declare_parameter<double>("boost_amount", 1);
+        this->declare_parameter<int>("boost_toggle", 6);
 
         // rclcpp::Parameter
         default_max = this->get_parameter("default_max").as_double();
@@ -50,7 +50,6 @@ class Joystick : public rclcpp::Node
         boost_coef = boost_amount;
       else
         boost_coef = default_max;
-        
       twist_stamped.twist.linear.x = msg.axes[1] * boost_coef;
       //twist_stamped.twist.linear.y = msg.axes[0];
 
