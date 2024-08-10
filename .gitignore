@@ -7,4 +7,4 @@ install/
 #ignore log folder
 log/
 
-*.cpython-310.pyc
+**/__pycache__/
