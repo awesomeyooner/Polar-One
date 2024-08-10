@@ -25,6 +25,7 @@
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "include/carbot_hardware/arduino_interface_types.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "include/carbot_hardware/constants.hpp"
 
 namespace carbot_hardware{
 
@@ -46,10 +47,10 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(const hardw
   config.timeout_ms = std::stoi(info_.hardware_parameters["timeout_ms"]);
 
   drive_motor.device = config.drive_id;
-  drive_motor.control_mode = ArduinoValue::PERCENT;
+  drive_motor.control_mode = TypeValue::PERCENT;
 
   steer_motor.device = config.steer_id;
-  steer_motor.control_mode = ArduinoValue::PERCENT;
+  steer_motor.control_mode = TypeValue::PERCENT;
 
   voltage_sensor.device = config.voltage_sensor_id;
 
@@ -83,7 +84,7 @@ std::vector<hardware_interface::StateInterface> CarlikeBotSystemHardware::export
   //=====voltage sensor=====
   state_interfaces.emplace_back(hardware_interface::StateInterface(
     voltage_sensor.device,
-    ArduinoValue::VOLTAGE,
+    TypeValue::VOLTAGE,
     &voltage_sensor.value
   ));
 
@@ -116,6 +117,18 @@ std::vector<hardware_interface::CommandInterface> CarlikeBotSystemHardware::expo
 hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_activate(const rclcpp_lifecycle::State & /*previous_state*/){
   RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "Activating ...please wait...");
   comms.connect(config.port, config.baud_rate, config.timeout_ms);
+
+  std::vector<ArduinoComms::ArduinoMessage> messages;
+
+  messages.push_back(drive_motor.config_bound(TypeValue::LOWER_BOUND, MotorConstants::MAX_REVERSE));
+  messages.push_back(drive_motor.config_bound(TypeValue::UPPER_BOUND, MotorConstants::MAX_FORWARD));
+  messages.push_back(drive_motor.config_bound(TypeValue::NEUTRAL, MotorConstants::NEUTRAL));
+
+  messages.push_back(steer_motor.config_bound(TypeValue::LOWER_BOUND, ServoConstants::MAX_RIGHT));
+  messages.push_back(steer_motor.config_bound(TypeValue::UPPER_BOUND, ServoConstants::MAX_LEFT));
+
+  comms.send_message(messages); 
+  
   RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "Successfully activated!");
 
   return hardware_interface::CallbackReturn::SUCCESS;

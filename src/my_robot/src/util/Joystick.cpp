@@ -20,6 +20,15 @@ class Joystick : public rclcpp::Node
   //5 right trigger
     Joystick() : Node("teleop")
     {
+        this->declare_parameter<double>("default_max", 0.5);
+        this->declare_parameter<double>("boost_amount", 1);
+        this->declare_parameter<int>("boost_toggle", 6);
+
+        // rclcpp::Parameter
+        default_max = this->get_parameter("default_max").as_double();
+        boost_amount = this->get_parameter("boost_amount").as_double();
+        boost_toggle = this->get_parameter("boost_toggle").as_int();
+
         publisher = this->create_publisher<geometry_msgs::msg::TwistStamped>("cmd_vel", 10);
         subscription = this->create_subscription<sensor_msgs::msg::Joy>(
         "joy", 10, std::bind(&Joystick::topic_callback, this, _1));
@@ -35,7 +44,13 @@ class Joystick : public rclcpp::Node
       twist_stamped.header.frame_id = "command_velocity";
       twist_stamped.header.stamp = this->now();
 
-      twist_stamped.twist.linear.x = msg.axes[1];
+      double boost_coef;
+
+      if(msg.buttons.at(boost_toggle))
+        boost_coef = boost_amount;
+      else
+        boost_coef = default_max;
+      twist_stamped.twist.linear.x = msg.axes[1] * boost_coef;
       //twist_stamped.twist.linear.y = msg.axes[0];
 
       twist_stamped.twist.angular.z = msg.axes[3];
@@ -45,6 +60,10 @@ class Joystick : public rclcpp::Node
 
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr subscription;
     rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr publisher;
+
+    double default_max;
+    double boost_toggle;
+    double boost_amount;
 };
 
 int main(int argc, char * argv[])

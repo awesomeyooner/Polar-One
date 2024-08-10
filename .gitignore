@@ -6,3 +6,5 @@ install/
 
 #ignore log folder
 log/
+
+**/__pycache__/

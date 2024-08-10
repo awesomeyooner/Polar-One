@@ -21,9 +21,12 @@ class CameraDriver(Node):
     def timer_callback(self):
         ret, frame = self.capture.read()
 
+        mirrored_side = cv2.flip(frame, 0)
+        normal = cv2.flip(mirrored_side, 1)
+
         if ret:
             self.publisher.publish(
-                self.bridge.cv2_to_imgmsg(frame)
+                self.bridge.cv2_to_imgmsg(normal)
             )
 
 def main(args=None):

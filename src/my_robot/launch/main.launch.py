@@ -53,6 +53,14 @@ def generate_launch_description():
     translator_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource('src/my_robot/launch/effort_translator.launch.py')
     )
+
+    camera_driver_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource('src/lane_detector/launch/camera_driver.launch.py')
+    )
+
+    detection_model_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource('src/lane_detector/launch/detection_model.launch.py')
+    )
     # component2_launch = IncludeLaunchDescription(
     #     PythonLaunchDescriptionSource('component2.launch.py')
     # )
@@ -65,8 +73,10 @@ def generate_launch_description():
         joint_state_broadcaster_spawner,
         robot_bicycle_controller_spawner,
 
-        joystick_launch,
+        #joystick_launch,
         translator_launch,
+        camera_driver_launch,
+        detection_model_launch
 
         # component2_launch,
         # Add any additional launch files or actions here

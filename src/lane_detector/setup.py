@@ -26,6 +26,8 @@ setup(
         'console_scripts': [
             'camera_driver = lane_detector.camera_publisher.driver:main',
             'camera_compressor = lane_detector.camera_publisher.compressed:main',
+            'detector_node = lane_detector.detection_model.detection_node:main',
+            'test = lane_detector.detection_model.test:main'
         ],
     },
 )

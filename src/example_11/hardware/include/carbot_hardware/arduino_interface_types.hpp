@@ -1,23 +1,30 @@
 #ifndef ARDUINO_INTERFACE__TYPES__ARDUINO_INTERFACE_TYPES_HPP_
 #define ARDUINO_INTERFACE__TYPES__ARDUINO_INTERFACE_TYPES_HPP_
 
-namespace ArduinoValue{
+namespace MessageType{
+  constexpr char STATUS[] = "status";
 
-//message_type macros
-constexpr char STATUS[] = "status";
+  constexpr char CONTROL[] = "control";
 
-constexpr char CONTROL[] = "control";
+  constexpr char CONFIG[] = "config";
 
-constexpr char CONFIG[] = "config";
+  constexpr char UNCONFIGURED[] = "unconfigured";
+}
 
-//type_value macros
-constexpr char VELOCITY[] = "velocity";
+namespace TypeValue{
+  constexpr char VELOCITY[] = "velocity";
 
-constexpr char POSITION[] = "position";
+  constexpr char POSITION[] = "position";
 
-constexpr char PERCENT[] = "percent";
+  constexpr char PERCENT[] = "percent";
 
-constexpr char VOLTAGE[] = "voltage";
-}  // namespace ArduinoValue
+  constexpr char VOLTAGE[] = "voltage";
+
+  constexpr char LOWER_BOUND[] = "lower_bound";
+
+  constexpr char NEUTRAL[] = "neutral";
+
+  constexpr char UPPER_BOUND[] = "upper_bound";
+}
 
 #endif  // ARDUINO_INTERFACE__TYPES__ARDUINO_INTERFACE_TYPES_HPP_
