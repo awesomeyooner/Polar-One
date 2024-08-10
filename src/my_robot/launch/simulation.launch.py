@@ -10,31 +10,41 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
+    hardware_package = "carbot_hardware"
+
     carbot_hardware_interface_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource('src/example_11/bringup/launch/carlikebot.launch.py')
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(hardware_package), "bringup", "launch", "carlikebot.launch.py"))
     )
 
     robot_state_publisher_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource('src/example_11/bringup/launch/robot_state_publisher.launch.py'),
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(hardware_package), "bringup", "launch", "robot_state_publisher.launch.py")),
         launch_arguments={'use_sim_time': 'true'}.items()
     )
+
+    # ===================================================================================
 
     joint_state_publisher_node = Node(
         package="joint_state_publisher_gui",
         executable="joint_state_publisher_gui",
     )
 
+    # ======================================================================================
+
+    robot_package= "my_robot"
+
     joystick_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource('src/my_robot/launch/joystick.launch.py')
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(robot_package), "launch", "joystick.launch.py"))
     )
 
     mux_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource('src/my_robot/launch/twist_mux.launch.py')
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(robot_package), "launch", "twist_mux.launch.py"))
     )
 
     translator_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource('src/my_robot/launch/effort_translator.launch.py')
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(robot_package), "launch", "effort_translator.launch.py"))
     )
+
+    # ===================================================================================
 
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
