@@ -26,13 +26,17 @@
 
         <joint name="${prefix}virtual_rear_wheel_joint">
           <command_interface name="velocity"/>
+
           <state_interface name="velocity"/>
           <state_interface name="position"/>
+          <state_interface name="effort"/>
         </joint>
 
         <joint name="${prefix}virtual_front_wheel_joint">
           <command_interface name="position"/>
+
           <state_interface name="position"/>
+          <state_interface name="effort"/>
         </joint>
 
         <sensor name="${prefix}voltage_sensor">
@@ -67,6 +71,10 @@
           <state_interface name="position">
             <param name="initial_value">0.0</param>
           </state_interface>
+
+          <state_interface name="effort">
+            <param name="initial_value">0.0</param>
+          </state_interface>
             
         </joint>
 
@@ -81,6 +89,10 @@
             
 
           <state_interface name="position">
+            <param name="initial_value">0.0</param>
+          </state_interface>
+
+          <state_interface name="effort">
             <param name="initial_value">0.0</param>
           </state_interface>
             
@@ -98,6 +110,10 @@
           <state_interface name="position">
             <param name="initial_value">0.0</param>
           </state_interface>
+
+          <state_interface name="effort">
+            <param name="initial_value">0.0</param>
+          </state_interface>
             
         </joint>
   
@@ -110,6 +126,10 @@
           </command_interface>
           
           <state_interface name="position">
+            <param name="initial_value">0.0</param>
+          </state_interface>
+
+          <state_interface name="effort">
             <param name="initial_value">0.0</param>
           </state_interface>
   
@@ -127,6 +147,10 @@
           <state_interface name="position">
             <param name="initial_value">0.0</param>
           </state_interface>
+
+          <state_interface name="effort">
+            <param name="initial_value">0.0</param>
+          </state_interface>
   
         </joint>
 
@@ -142,6 +166,10 @@
           <state_interface name="position">
             <param name="initial_value">0.0</param>
           </state_interface>
+
+          <state_interface name="effort">
+            <param name="initial_value">0.0</param>
+          </state_interface>
   
         </joint>
 
@@ -153,6 +181,10 @@
           <state_interface name="position">
             <param name="initial_value">0.0</param>
           </state_interface>
+
+          <state_interface name="effort">
+            <param name="initial_value">0.0</param>
+          </state_interface>
   
         </joint>
 
@@ -162,6 +194,10 @@
           <param name="multiplier">1</param>
           
           <state_interface name="position">
+            <param name="initial_value">0.0</param>
+          </state_interface>
+
+          <state_interface name="effort">
             <param name="initial_value">0.0</param>
           </state_interface>
   
