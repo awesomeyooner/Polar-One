@@ -17,7 +17,15 @@ class CameraCompressedDriver(Node):
 
     def listener_callback(self, image):
         frame = self.bridge.imgmsg_to_cv2(image)
-        compressed = self.bridge.cv2_to_compressed_imgmsg(frame, 'jpg')
+
+        light_frame = cv2.resize(
+            frame, 
+            (
+                int(frame.shape[1] * 0.25), 
+                int(frame.shape[0] * 0.25)
+            )
+        )
+        compressed = self.bridge.cv2_to_compressed_imgmsg(light_frame, 'jpg')
 
         self.publisher.publish(compressed)
 
