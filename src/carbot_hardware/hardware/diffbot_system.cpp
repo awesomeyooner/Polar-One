@@ -47,10 +47,10 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(const hardw
   config.timeout_ms = std::stoi(info_.hardware_parameters["timeout_ms"]);
 
   drive_motor.device = config.drive_id;
-  drive_motor.control_mode = TypeValue::PERCENT;
+  drive_motor.control_mode = TypeValue::EFFORT;
 
   steer_motor.device = config.steer_id;
-  steer_motor.control_mode = TypeValue::PERCENT;
+  steer_motor.control_mode = TypeValue::EFFORT;
 
   voltage_sensor.device = config.voltage_sensor_id;
 
@@ -74,11 +74,23 @@ std::vector<hardware_interface::StateInterface> CarlikeBotSystemHardware::export
     &drive_motor.position
     ));
 
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+    drive_motor.device, 
+    hardware_interface::HW_IF_EFFORT, 
+    &drive_motor.effort
+    ));
+
   //======steer motor=========
   state_interfaces.emplace_back(hardware_interface::StateInterface(
     steer_motor.device, 
     hardware_interface::HW_IF_POSITION, 
     &steer_motor.position
+    ));
+
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+    steer_motor.device, 
+    hardware_interface::HW_IF_EFFORT, 
+    &steer_motor.effort
     ));
 
   //=====voltage sensor=====
@@ -126,6 +138,7 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_activate(const r
 
   messages.push_back(steer_motor.config_bound(TypeValue::LOWER_BOUND, ServoConstants::MAX_RIGHT));
   messages.push_back(steer_motor.config_bound(TypeValue::UPPER_BOUND, ServoConstants::MAX_LEFT));
+  messages.push_back(steer_motor.config_bound(TypeValue::NEUTRAL, ServoConstants::NEUTRAL));
 
   comms.send_message(messages); 
   

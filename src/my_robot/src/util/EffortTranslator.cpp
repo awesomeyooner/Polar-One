@@ -30,8 +30,8 @@ class EffortTranslator : public rclcpp::Node
       std_msgs::msg::Float64MultiArray velocity_command = std_msgs::msg::Float64MultiArray();
       std_msgs::msg::Float64MultiArray position_command = std_msgs::msg::Float64MultiArray();
 
-      velocity_command.data.push_back(msg.twist.linear.x * 200);
-      position_command.data.push_back(msg.twist.angular.z * 1.3);
+      velocity_command.data.push_back(msg.twist.linear.x);
+      position_command.data.push_back(msg.twist.angular.z);
 
       velocity_publisher -> publish(velocity_command);
       position_publisher -> publish(position_command);

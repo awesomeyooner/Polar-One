@@ -3,3 +3,4 @@ teleop:
     default_max: 0.5
     boost_amount: 1 
     boost_toggle: 6
+    freeze_toggle: 0

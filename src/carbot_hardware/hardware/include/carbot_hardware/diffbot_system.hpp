@@ -74,6 +74,7 @@ namespace carbot_hardware{
 
       double position = 0;
       double velocity = 0;
+      double effort = 0;
 
       void apply(ArduinoComms::ArduinoMessage message){
             
@@ -85,7 +86,10 @@ namespace carbot_hardware{
             
             else if(message.message_type == MessageType::STATUS && message.type_value == TypeValue::VELOCITY)
                 velocity = message.value;
-
+            
+            else if(message.message_type == MessageType::STATUS && message.type_value == TypeValue::EFFORT)
+                effort = message.value;
+                
             if(message.message_type == MessageType::CONTROL){
                 control_mode = message.type_value; //velocity or position or percent
                 control_value = message.value;
