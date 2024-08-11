@@ -19,12 +19,6 @@ def generate_launch_description():
     )
 
     return launch.LaunchDescription([
-
-        launch_ros.actions.Node(
-            package='my_robot',
-            executable='effort_translator',
-            name='effort_translator',
-            )
-
+        translator
             #('/cmd_vel', '/diffbot_base_controller/cmd_vel')
   ])

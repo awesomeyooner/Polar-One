@@ -38,7 +38,8 @@ def generate_launch_description():
             # "effort_controllers",
             # "-c", "/controller_manager",
             # "-t", "effort_controllers/JointGroupEffortController", 
-            "effort_controller",
+            "velocity_controller",
+            "position_controller",
             "--controller-manager", 
             "/controller_manager"
             ],
