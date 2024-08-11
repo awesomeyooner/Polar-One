@@ -10,16 +10,18 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
+    hardware_package = "carbot_hardware"
+
     carbot_hardware_interface_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource('src/example_11/bringup/launch/carlikebot.launch.py')
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(hardware_package), "bringup", "launch", "carlikebot.launch.py"))
     )
 
     controller_manager_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource('src/example_11/bringup/launch/controller_manager.launch.py')
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(hardware_package), "bringup", "launch", "controller_manager.launch.py"))
     )
 
     robot_state_publisher_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource('src/example_11/bringup/launch/robot_state_publisher.launch.py'),
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(hardware_package), "bringup", "launch", "robot_state_publisher.launch.py")),
         launch_arguments={'use_sim_time': 'false'}.items()
     )
 
@@ -36,34 +38,42 @@ def generate_launch_description():
             # "effort_controllers",
             # "-c", "/controller_manager",
             # "-t", "effort_controllers/JointGroupEffortController", 
-            "effort_controller",
+            "velocity_controller",
+            "position_controller",
             "--controller-manager", 
             "/controller_manager"
             ],
     )
 
+    # =============================================================================================================
+
+    robot_package= "my_robot"
+
     joystick_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource('src/my_robot/launch/joystick.launch.py')
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(robot_package), "launch", "joystick.launch.py"))
     )
 
     mux_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource('src/my_robot/launch/twist_mux.launch.py')
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(robot_package), "launch", "twist_mux.launch.py"))
     )
 
     translator_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource('src/my_robot/launch/effort_translator.launch.py')
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(robot_package), "launch", "effort_translator.launch.py"))
     )
 
+    # ============================================================================================================================================
+
+    vision_package = "lane_detector"
+
     camera_driver_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource('src/lane_detector/launch/camera_driver.launch.py')
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(vision_package), "launch", "camera_driver.launch.py"))
     )
 
     detection_model_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource('src/lane_detector/launch/detection_model.launch.py')
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(vision_package), "launch", "detection_model.launch.py"))
     )
-    # component2_launch = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource('component2.launch.py')
-    # )
+    
+    # ===============================================================================================================================
 
     return LaunchDescription([
         #diffbot_hardware_interface_launch,

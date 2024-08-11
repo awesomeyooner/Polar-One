@@ -99,14 +99,14 @@ std::vector<hardware_interface::CommandInterface> CarlikeBotSystemHardware::expo
   //====drive motor=====
   command_interfaces.emplace_back(hardware_interface::CommandInterface(
     drive_motor.device,
-    hardware_interface::HW_IF_EFFORT,
+    hardware_interface::HW_IF_VELOCITY,
     &drive_motor.control_value
   ));
 
   //====steer motor=====
   command_interfaces.emplace_back(hardware_interface::CommandInterface(
     steer_motor.device,
-    hardware_interface::HW_IF_EFFORT,
+    hardware_interface::HW_IF_POSITION,
     &steer_motor.control_value
   ));
 

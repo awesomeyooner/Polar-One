@@ -15,7 +15,9 @@ class EffortTranslator : public rclcpp::Node
  
     EffortTranslator() : Node("translator")
     {
-        publisher = this->create_publisher<std_msgs::msg::Float64MultiArray>("effort_controller/commands", 10);
+        velocity_publisher = this->create_publisher<std_msgs::msg::Float64MultiArray>("velocity_controller/commands", 10);
+        position_publisher = this->create_publisher<std_msgs::msg::Float64MultiArray>("position_controller/commands", 10);
+        
         subscription = this->create_subscription<geometry_msgs::msg::TwistStamped>(
         "cmd_vel", 10, std::bind(&EffortTranslator::topic_callback, this, _1));
     }
@@ -25,16 +27,20 @@ class EffortTranslator : public rclcpp::Node
     {
       //RCLCPP_INFO(this->get_logger(), "I heard: '%f'", msg.axes[0]);
 
-      std_msgs::msg::Float64MultiArray translated_command = std_msgs::msg::Float64MultiArray();
+      std_msgs::msg::Float64MultiArray velocity_command = std_msgs::msg::Float64MultiArray();
+      std_msgs::msg::Float64MultiArray position_command = std_msgs::msg::Float64MultiArray();
 
-      translated_command.data.push_back(msg.twist.linear.x);
-      translated_command.data.push_back(msg.twist.angular.z);
+      velocity_command.data.push_back(msg.twist.linear.x * 200);
+      position_command.data.push_back(msg.twist.angular.z * 1.3);
 
-      publisher -> publish(translated_command);
+      velocity_publisher -> publish(velocity_command);
+      position_publisher -> publish(position_command);
     }
 
     rclcpp::Subscription<geometry_msgs::msg::TwistStamped>::SharedPtr subscription;
-    rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr publisher;
+
+    rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr velocity_publisher;
+    rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr position_publisher;
 };
 
 int main(int argc, char * argv[])
