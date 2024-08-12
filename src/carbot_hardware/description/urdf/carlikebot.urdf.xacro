@@ -15,7 +15,11 @@
   <xacro:include filename="$(find carbot_hardware)/ros2_control/carlikebot.ros2_control.xacro" />
   <!-- <xacro:include filename="$(find carbot_hardware)/ros2_control/sim.xacro"/> -->
 
+  <!-- Import Camera -->
+  <xacro:include filename="$(find carbot_hardware)/urdf/camera.xacro" />
+
   <xacro:carlikebot prefix="$(arg prefix)" />
+  <xacro:camera prefix="$(arg prefix)"/>
 
   <xacro:carlikebot_ros2_control name="CarlikeBot" prefix="$(arg prefix)" />
 
