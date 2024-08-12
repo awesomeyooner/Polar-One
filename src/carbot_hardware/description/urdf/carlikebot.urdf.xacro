@@ -16,7 +16,10 @@
   <!-- <xacro:include filename="$(find carbot_hardware)/ros2_control/sim.xacro"/> -->
 
   <!-- Import Camera -->
-  <xacro:include filename="$(find carbot_hardware)/urdf/camera.xacro" />
+  <!-- <xacro:include filename="$(find carbot_hardware)/urdf/camera.xacro" /> -->
+
+  <!-- Import Depth Camera -->
+  <xacro:include filename="$(find carbot_hardware)/urdf/depth_camera.xacro" />
 
   <!-- Import LiDAR -->
   <xacro:include filename="$(find carbot_hardware)/urdf/lidar.xacro" />
