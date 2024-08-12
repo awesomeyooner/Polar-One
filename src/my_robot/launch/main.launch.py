@@ -69,6 +69,10 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(vision_package), "launch", "camera_driver.launch.py"))
     )
 
+    camera_compressor_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(vision_package), "launch", "camera_compressor.launch.py"))
+    )
+
     detection_model_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(vision_package), "launch", "detection_model.launch.py"))
     )
@@ -86,6 +90,7 @@ def generate_launch_description():
         #joystick_launch,
         translator_launch,
         camera_driver_launch,
+        camera_compressor_launch,
         detection_model_launch
 
         # component2_launch,

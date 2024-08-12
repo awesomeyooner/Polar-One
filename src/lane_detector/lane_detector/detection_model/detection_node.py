@@ -15,7 +15,7 @@ class LaneDetector(Node):
         self.frame_publisher = self.create_publisher(CompressedImage, 'detection/image_raw/compressed', 10)
         self.delta_publisher = self.create_publisher(Float64, 'detection/slope_delta', 10)
 
-        self.subscription = self.create_subscription(Image, 'image_raw', self.listener_callback, 10)
+        self.subscription = self.create_subscription(Image, 'camera/image_raw', self.listener_callback, 10)
 
         self.bridge = CvBridge()
 
