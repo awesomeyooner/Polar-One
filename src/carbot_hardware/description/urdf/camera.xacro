@@ -16,7 +16,7 @@
         <joint name="${prefix}camera_joint" type="fixed">
             <parent link="${prefix}chassis_link"/>
             <child link="${prefix}camera_link"/>
-            <origin xyz="${x_transform} ${y_transform} ${z_transform}" rpy="${r_transform} ${p_transform} ${y_transform}"/>
+            <origin xyz="${x_transform / 2} ${y_transform} ${z_transform}" rpy="${r_transform} ${p_transform} ${y_transform}"/>
         </joint>
 
         <link name="${prefix}camera_link">
@@ -62,7 +62,7 @@
 
                 </camera>
 
-                <plugin name="laser_controller" filename="libgazebo_ros_camera.so">
+                <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
                     <frame_name>camera_link_optical</frame_name>
                 </plugin>
             </sensor>

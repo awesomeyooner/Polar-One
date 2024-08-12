@@ -18,8 +18,12 @@
   <!-- Import Camera -->
   <xacro:include filename="$(find carbot_hardware)/urdf/camera.xacro" />
 
+  <!-- Import LiDAR -->
+  <xacro:include filename="$(find carbot_hardware)/urdf/lidar.xacro" />
+
   <xacro:carlikebot prefix="$(arg prefix)" />
   <xacro:camera prefix="$(arg prefix)"/>
+  <xacro:lidar prefix="$(arg prefix)"/>
 
   <xacro:carlikebot_ros2_control name="CarlikeBot" prefix="$(arg prefix)" />
 
