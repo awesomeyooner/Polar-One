@@ -99,7 +99,7 @@ def generate_launch_description():
         camera_compressor_launch,
         detection_model_launch,
 
-        foxglove
+        #foxglove
 
         # component2_launch,
         # Add any additional launch files or actions here
