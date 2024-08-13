@@ -20,6 +20,8 @@ namespace TypeValue{
 
   constexpr char VOLTAGE[] = "voltage";
 
+  constexpr char RAW[] = "raw";
+
   constexpr char LOWER_BOUND[] = "lower_bound";
 
   constexpr char NEUTRAL[] = "neutral";

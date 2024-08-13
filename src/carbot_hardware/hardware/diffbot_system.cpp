@@ -42,6 +42,8 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(const hardw
 
   config.voltage_sensor_id = info_.hardware_parameters["voltage_sensor_id"];
 
+  config.heartbeat_id = info_.hardware_parameters["heartbeat_id"];
+
   config.baud_rate = std::stoi(info_.hardware_parameters["baud_rate"]);
   config.loop_rate = std::stoi(info_.hardware_parameters["loop_rate"]);
   config.timeout_ms = std::stoi(info_.hardware_parameters["timeout_ms"]);
@@ -53,6 +55,10 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(const hardw
   steer_motor.control_mode = TypeValue::EFFORT;
 
   voltage_sensor.device = config.voltage_sensor_id;
+
+  heartbeat_monitor.device = config.heartbeat_id;
+  heartbeat_monitor.message_type = MessageType::STATUS;
+  heartbeat_monitor.type_value = TypeValue::RAW;
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -98,6 +104,13 @@ std::vector<hardware_interface::StateInterface> CarlikeBotSystemHardware::export
     voltage_sensor.device,
     TypeValue::VOLTAGE,
     &voltage_sensor.value
+  ));
+
+  //======heartbeat=======
+  state_interfaces.emplace_back(hardware_interface::StateInterface(
+    heartbeat_monitor.device,
+    TypeValue::RAW,
+    &heartbeat_monitor.value
   ));
 
 
@@ -165,6 +178,7 @@ hardware_interface::return_type CarlikeBotSystemHardware::read(const rclcpp::Tim
     steer_motor.apply(message);
 
     voltage_sensor.apply(message);
+    heartbeat_monitor.apply(message);
   }
 
   return hardware_interface::return_type::OK;
@@ -175,6 +189,8 @@ hardware_interface::return_type carbot_hardware ::CarlikeBotSystemHardware::writ
 
   messages.push_back(drive_motor.send_command(drive_motor.control_mode, drive_motor.control_value));
   messages.push_back(steer_motor.send_command(steer_motor.control_mode, steer_motor.control_value));
+
+  messages.push_back(heartbeat_monitor.send_message(heartbeat_monitor.value));
 
   //RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), comms.debug(messages).c_str());
 

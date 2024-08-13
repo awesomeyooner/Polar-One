@@ -47,18 +47,45 @@ namespace carbot_hardware{
 
       std::string voltage_sensor_id = "";
 
+      std::string heartbeat_id = "";
+
       int32_t baud_rate = 0;
       int32_t loop_rate = 0;
       int32_t timeout_ms = 0;
     };
 
-     struct Sensor{
-      std::string device = "";
-      std::string type_value = "";
-      
-      double value = 0;
+    struct BidirectionalDevice{
+        std::string device = "";
+        std::string message_type = "";
+        std::string type_value = "";
+        
+        double value = 0;
 
-      void apply(ArduinoComms::ArduinoMessage message){
+        void apply(ArduinoComms::ArduinoMessage message){
+            if(message.device != device)
+                return;
+
+            type_value = message.type_value;
+            value = message.value;
+        }
+
+        ArduinoComms::ArduinoMessage send_message(double value){
+            return ArduinoComms::ArduinoMessage{
+                .device = device,
+                .message_type = message_type,
+                .type_value = type_value,
+                .value = value
+            };
+        }
+    };
+
+    struct Sensor{
+        std::string device = "";
+        std::string type_value = "";
+        
+        double value = 0;
+
+        void apply(ArduinoComms::ArduinoMessage message){
             if(message.device != device)
                 return;
 
@@ -132,6 +159,7 @@ namespace carbot_hardware{
       Motor steer_motor;
 
       Sensor voltage_sensor;
+      BidirectionalDevice heartbeat_monitor;
 
     public:
       RCLCPP_SHARED_PTR_DEFINITIONS(CarlikeBotSystemHardware);

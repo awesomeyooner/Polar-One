@@ -17,6 +17,8 @@
           <param name="steer_id">virtual_front_wheel_joint</param>
 
           <param name="voltage_sensor_id">voltage_sensor</param>
+
+          <param name="heartbeat_id">heartbeat</param>
           
           <param name="baud_rate">115200</param>
           <param name="loop_rate">60</param>
@@ -38,6 +40,10 @@
           <state_interface name="position"/>
           <state_interface name="effort"/>
         </joint>
+
+        <sensor name="${prefix}heartbeat">
+          <state_interface name="raw"/>
+        </sensor>
 
         <sensor name="${prefix}voltage_sensor">
           <state_interface name="voltage"/>
