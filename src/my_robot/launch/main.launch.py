@@ -3,6 +3,7 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 import os
+from launch_ros.substitutions import FindPackageShare
 
 from ament_index_python.packages import get_package_share_directory
 
@@ -79,6 +80,11 @@ def generate_launch_description():
     
     # ===============================================================================================================================
 
+    foxglove = IncludeLaunchDescription(
+        (os.path.join(FindPackageShare("foxglove_bridge").find("foxglove_bridge"), "launch", "foxglove_bridge_launch.xml"))      
+    )
+    
+
     return LaunchDescription([
         #diffbot_hardware_interface_launch,
         #carbot_hardware_interface_launch,
@@ -91,7 +97,9 @@ def generate_launch_description():
         translator_launch,
         camera_driver_launch,
         camera_compressor_launch,
-        detection_model_launch
+        detection_model_launch,
+
+        foxglove
 
         # component2_launch,
         # Add any additional launch files or actions here
