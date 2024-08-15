@@ -9,7 +9,7 @@ class CameraDriver(Node):
     def __init__(self):
         super().__init__('camera_driver')
 
-        self.publisher = self.create_publisher(Image, 'image_raw', 10)
+        self.publisher = self.create_publisher(Image, 'camera/image_raw', 10)
 
         timer_period = 0.005 #seconds
 

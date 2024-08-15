@@ -16,9 +16,11 @@ namespace TypeValue{
 
   constexpr char POSITION[] = "position";
 
-  constexpr char PERCENT[] = "percent";
+  constexpr char EFFORT[] = "effort";
 
   constexpr char VOLTAGE[] = "voltage";
+
+  constexpr char RAW[] = "raw";
 
   constexpr char LOWER_BOUND[] = "lower_bound";
 

@@ -66,6 +66,20 @@ def generate_launch_description():
             ],
     )
 
+    # =====================================================================================================
+
+    vision_package = "lane_detector"
+
+    camera_compressor_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(vision_package), "launch", "camera_compressor.launch.py"))
+    )
+
+    detection_model_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(vision_package), "launch", "detection_model.launch.py"))
+    )
+
+    # ===================================================================================================
+
 
     gazebo_params_file = os.path.join(get_package_share_directory('my_robot'),'config','gazebo_params.yaml')
 
@@ -103,7 +117,10 @@ def generate_launch_description():
         spawn_entity,
         robot_bicycle_controller_spawner,
         joint_state_broadcaster_spawner,
-        rviz_node
+        rviz_node,
+
+        #camera_compressor_launch,
+        #detection_model_launch
         # component2_launch,
         # Add any additional launch files or actions here
     ])

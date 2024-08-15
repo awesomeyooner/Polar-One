@@ -10,11 +10,11 @@ def generate_launch_description():
             name='camera_driver',
             ),
 
-        launch_ros.actions.Node(
-            package='lane_detector',
-            executable='camera_compressor',
-            name='camera_compressor'
-        )
+        # launch_ros.actions.Node(
+        #     package='lane_detector',
+        #     executable='camera_compressor',
+        #     name='camera_compressor'
+        # )
 
             #('/cmd_vel', '/diffbot_base_controller/cmd_vel')
   ])
