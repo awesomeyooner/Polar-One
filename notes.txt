@@ -1,5 +1,8 @@
-to make a package:
+to make a package CMAKE:
 ros2 pkg create --build-type ament_cmake <package_name>
+
+to make a package PYTHON:
+ros2 pkg create --build-type ament_python <package_name>
 
 to run things in general:
 ros2 run <package name> <executable name>
