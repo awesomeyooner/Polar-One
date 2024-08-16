@@ -3,47 +3,59 @@
 
 #include "Device.hpp"
 #include "nlohmann/json.hpp"
-#include "ros2_control_demo_example_2/arduino_interface_types.hpp"
 
 using json = nlohmann::json;
 
-class Motor : public Device{
+namespace hardware_component{
 
-    public:
-        std::string device;
-        std::string control_mode; //if message_type is control
-        double control_value; //when message_type is control,  then command_value = value of packet
+    class Motor : public Device{
 
-        double position;
-        double velocity;
-        
-        void apply(ArduinoComms::ArduinoMessage message) override{
+        public:
+            std::string control_mode;
+            double control_value; 
+
+            double position = 0;
+            double velocity = 0;
+            double effort = 0;
+
+            Motor() = default;
             
-            if(message.device != device)
-                return;
+            void apply(ArduinoComms::ArduinoMessage message){
+                if(message.device != device)
+                    return;
 
-            if(message.message_type == ArduinoValue::STATUS && message.type_value == ArduinoValue::POSITION)
-                position = message.value;
-            
-            else if(message.message_type == ArduinoValue::STATUS && message.type_value == ArduinoValue::VELOCITY)
-                velocity = message.value;
+                if(message.message_type == MessageType::STATUS){
+                    if(message.type_value == TypeValue::POSITION)
+                        position = message.value;
+                    else if(message.type_value == TypeValue::VELOCITY)
+                        velocity = message.value;
+                    else if(message.type_value == TypeValue::EFFORT)
+                        effort = message.value;
+                }
 
-            if(message.message_type == ArduinoValue::CONTROL){
-                control_mode = message.type_value; //velocity or position or percent
-                control_value = message.value;
+                else if(message.message_type == MessageType::CONTROL){
+                    control_mode = message.type_value;
+                    control_value = message.value;
+                }
             }
-        }
 
-        ArduinoComms::ArduinoMessage send_command(std::string mode, double value){
-            return ArduinoComms::ArduinoMessage{
-                .device = device,
-                .message_type = ArduinoValue::CONTROL,
-                .type_value = mode,
-                .value = value
-            };
-        }
+            ArduinoComms::ArduinoMessage send_command(std::string mode, double value){
+                return ArduinoComms::ArduinoMessage{
+                    .device = device,
+                    .message_type = MessageType::CONTROL,
+                    .type_value = mode,
+                    .value = value
+                };
+            }
 
-        
-};
-
+            ArduinoComms::ArduinoMessage config_bound(std::string type, double value){
+                return ArduinoComms::ArduinoMessage{
+                    .device = device,
+                    .message_type = MessageType::CONFIG,
+                    .type_value = type,
+                    .value = value
+                };
+            }
+    };
+}
 #endif
