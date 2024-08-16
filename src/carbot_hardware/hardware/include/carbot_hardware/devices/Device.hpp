@@ -2,26 +2,34 @@
 #define DEVICE_DEVICE_HPP
 
 #include "carbot_hardware/arduino_comms.hpp"
+#include "carbot_hardware/arduino_interface_types.hpp"
 
-class Device{
+namespace hardware_component{
 
-    private:
+    class Device{
 
-    public:
+        private:
 
-        std::vector<ArduinoComms::ArduinoMessage> internal_state;
+        public:
 
-        virtual std::vector<ArduinoComms::ArduinoMessage> get_state(){
-            return internal_state;
-        }
+            Device() = default;
 
-        virtual void update_state(std::vector<ArduinoComms::ArduinoMessage> new_state){
-            internal_state = new_state;
-        }
+            virtual ArduinoUtility::ArduinoMessage send_message(std::string message_type, std::string type_value, double value){
+                return ArduinoUtility::ArduinoMessage{
+                    .device = device,
+                    .message_type = message_type,
+                    .type_value = type_value,
+                    .value = value
+                };
+            }
 
-        virtual void apply(ArduinoComms::ArduinoMessage message);
+            virtual void apply(ArduinoUtility::ArduinoMessage message){}
+
+            std::string device;
+            double value;
 
 
-};
+    };
+}
 
 #endif

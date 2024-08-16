@@ -8,6 +8,8 @@
 #include <iostream>
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include "arduino_interface_types.hpp"
+
 using json = nlohmann::json;
 
 
@@ -42,12 +44,12 @@ class ArduinoComms{
 
   public:
 
-    struct ArduinoMessage{
-        std::string device = ""; //(id) left, right, voltage_sensor
-        std::string message_type = ""; //status, control, config
-        std::string type_value = ""; //velocity, position, percent, inverted
-        double value = 0; //whatever value you want to send
-    };
+    // struct ArduinoMessage{
+    //     std::string device = ""; //(id) left, right, voltage_sensor
+    //     std::string message_type = ""; //status, control, config
+    //     std::string type_value = ""; //velocity, position, percent, inverted
+    //     double value = 0; //whatever value you want to send
+    // };
     
     ArduinoComms() = default;
 
@@ -68,11 +70,11 @@ class ArduinoComms{
       return serial_connection.IsOpen();
     }
 
-    std::string debug(std::vector<ArduinoMessage> messages){
+    std::string debug(std::vector<ArduinoUtility::ArduinoMessage> messages){
 
       json total_packet;
 
-      for(ArduinoMessage message : messages){
+      for(ArduinoUtility::ArduinoMessage message : messages){
 
         json single_packet = {
           {"device", message.device},
@@ -139,8 +141,8 @@ class ArduinoComms{
       }
     }
 
-    std::vector<ArduinoMessage> get_message_dump(){
-      std::vector<ArduinoMessage> messages;
+    std::vector<ArduinoUtility::ArduinoMessage> get_message_dump(){
+      std::vector<ArduinoUtility::ArduinoMessage> messages;
 
       json dump = get_json_dump();
 
@@ -150,7 +152,7 @@ class ArduinoComms{
       for(auto object : dump){
         
         messages.push_back(
-          ArduinoMessage
+          ArduinoUtility::ArduinoMessage
           {
             .device = object["device"],
             .message_type = object["message_type"],
@@ -163,7 +165,7 @@ class ArduinoComms{
       return messages;
     }
 
-    void send_message(ArduinoMessage message){
+    void send_message(ArduinoUtility::ArduinoMessage message){
 
         json packet = {
             {"device", message.device},
@@ -177,11 +179,11 @@ class ArduinoComms{
       serial_connection.Write(packet.dump() + '\n');
     }
 
-    void send_message(std::vector<ArduinoMessage> messages){
+    void send_message(std::vector<ArduinoUtility::ArduinoMessage> messages){
 
       json total_packet;
 
-      for(ArduinoMessage message : messages){
+      for(ArduinoUtility::ArduinoMessage message : messages){
 
         json single_packet = {
           {"device", message.device},
