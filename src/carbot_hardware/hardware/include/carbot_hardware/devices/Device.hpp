@@ -23,7 +23,7 @@ namespace hardware_component{
                 };
             }
 
-            virtual void apply(ArduinoComms::ArduinoMessage message);
+            virtual void apply(ArduinoComms::ArduinoMessage message){}
 
             std::string device;
             double value;
