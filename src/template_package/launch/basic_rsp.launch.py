@@ -8,7 +8,7 @@ import xacro
 def generate_launch_description():
 
     # Specify the name of the package and path to xacro file within the package
-    pkg_name = 'my_arm'
+    pkg_name = 'template_package'
     file_subpath = 'description/robot_core.xacro'
 
 
