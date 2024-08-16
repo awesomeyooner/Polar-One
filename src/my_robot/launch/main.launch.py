@@ -64,18 +64,22 @@ def generate_launch_description():
 
     # ============================================================================================================================================
 
-    vision_package = "lane_detector"
+    basic_camera_package = "camera_handler"
 
     camera_driver_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(vision_package), "launch", "camera_driver.launch.py"))
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(basic_camera_package), "launch", "camera_driver.launch.py"))
     )
 
     camera_compressor_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(vision_package), "launch", "camera_compressor.launch.py"))
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(basic_camera_package), "launch", "camera_compressor.launch.py"))
     )
 
+    # ================================================================================================================================
+
+    lane_detection_package = "lane_detector"
+
     detection_model_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(vision_package), "launch", "detection_model.launch.py"))
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(lane_detection_package), "launch", "detection_model.launch.py"))
     )
     
     # ===============================================================================================================================
