@@ -149,7 +149,7 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_activate(const r
   RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "Activating ...please wait...");
   comms.connect(config.port, config.baud_rate, config.timeout_ms);
 
-  std::vector<ArduinoComms::ArduinoMessage> messages;
+  std::vector<ArduinoUtility::ArduinoMessage> messages;
 
   messages.push_back(drive_motor.config_bound(TypeValue::LOWER_BOUND, MotorConstants::MAX_REVERSE));
   messages.push_back(drive_motor.config_bound(TypeValue::UPPER_BOUND, MotorConstants::MAX_FORWARD));
@@ -177,9 +177,9 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_deactivate(const
 hardware_interface::return_type CarlikeBotSystemHardware::read(const rclcpp::Time & /*time*/, const rclcpp::Duration & period){
 
   //RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), comms.debug().c_str());
-  std::vector<ArduinoComms::ArduinoMessage> messages = comms.get_message_dump();
+  std::vector<ArduinoUtility::ArduinoMessage> messages = comms.get_message_dump();
  
-  for(ArduinoComms::ArduinoMessage message : messages){
+  for(ArduinoUtility::ArduinoMessage message : messages){
     drive_motor.apply(message);
     steer_motor.apply(message);
 
@@ -191,7 +191,7 @@ hardware_interface::return_type CarlikeBotSystemHardware::read(const rclcpp::Tim
 }
 
 hardware_interface::return_type carbot_hardware ::CarlikeBotSystemHardware::write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/){
-  std::vector<ArduinoComms::ArduinoMessage> messages;
+  std::vector<ArduinoUtility::ArduinoMessage> messages;
 
   messages.push_back(drive_motor.send_command(drive_motor.control_mode, drive_motor.control_value));
   messages.push_back(steer_motor.send_command(steer_motor.control_mode, steer_motor.control_value));

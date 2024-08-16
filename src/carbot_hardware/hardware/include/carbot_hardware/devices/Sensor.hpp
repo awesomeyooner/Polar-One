@@ -4,6 +4,7 @@
 #include <nlohmann/json.hpp>
 
 #include "Device.hpp"
+#include "carbot_hardware/arduino_interface_types.hpp"
 
 using json = nlohmann::json;
 
@@ -21,7 +22,7 @@ namespace hardware_component{
 
             Sensor() = default;
 
-            void apply(ArduinoComms::ArduinoMessage message){
+            void apply(ArduinoUtility::ArduinoMessage message){
                 if(message.device != device)
                     return;
 
@@ -29,8 +30,8 @@ namespace hardware_component{
                 value = message.value;
             }
 
-            virtual ArduinoComms::ArduinoMessage send_message(std::string message_type, std::string type_value, double value){
-                return ArduinoComms::ArduinoMessage{
+            virtual ArduinoUtility::ArduinoMessage send_message(std::string message_type, std::string type_value, double value){
+                return ArduinoUtility::ArduinoMessage{
                     .device = device,
                     .message_type = message_type,
                     .type_value = type_value,

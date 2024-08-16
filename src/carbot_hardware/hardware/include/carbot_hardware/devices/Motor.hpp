@@ -3,6 +3,7 @@
 
 #include "Device.hpp"
 #include "nlohmann/json.hpp"
+#include "carbot_hardware/arduino_interface_types.hpp"
 
 using json = nlohmann::json;
 
@@ -20,7 +21,7 @@ namespace hardware_component{
 
             Motor() = default;
             
-            void apply(ArduinoComms::ArduinoMessage message){
+            void apply(ArduinoUtility::ArduinoMessage message){
                 if(message.device != device)
                     return;
 
@@ -39,8 +40,8 @@ namespace hardware_component{
                 }
             }
 
-            ArduinoComms::ArduinoMessage send_command(std::string mode, double value){
-                return ArduinoComms::ArduinoMessage{
+            ArduinoUtility::ArduinoMessage send_command(std::string mode, double value){
+                return ArduinoUtility::ArduinoMessage{
                     .device = device,
                     .message_type = MessageType::CONTROL,
                     .type_value = mode,
@@ -48,8 +49,8 @@ namespace hardware_component{
                 };
             }
 
-            ArduinoComms::ArduinoMessage config_bound(std::string type, double value){
-                return ArduinoComms::ArduinoMessage{
+            ArduinoUtility::ArduinoMessage config_bound(std::string type, double value){
+                return ArduinoUtility::ArduinoMessage{
                     .device = device,
                     .message_type = MessageType::CONFIG,
                     .type_value = type,

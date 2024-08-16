@@ -14,8 +14,8 @@ namespace hardware_component{
 
             Device() = default;
 
-            virtual ArduinoComms::ArduinoMessage send_message(std::string message_type, std::string type_value, double value){
-                return ArduinoComms::ArduinoMessage{
+            virtual ArduinoUtility::ArduinoMessage send_message(std::string message_type, std::string type_value, double value){
+                return ArduinoUtility::ArduinoMessage{
                     .device = device,
                     .message_type = message_type,
                     .type_value = type_value,
@@ -23,7 +23,7 @@ namespace hardware_component{
                 };
             }
 
-            virtual void apply(ArduinoComms::ArduinoMessage message){}
+            virtual void apply(ArduinoUtility::ArduinoMessage message){}
 
             std::string device;
             double value;
