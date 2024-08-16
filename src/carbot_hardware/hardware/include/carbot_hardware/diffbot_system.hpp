@@ -34,8 +34,6 @@
 
 #include "arduino_comms.hpp"
 #include "arduino_interface_types.hpp"
-#include "devices/Motor.hpp"
-#include "devices/Sensor.hpp"
 
 namespace carbot_hardware{
 
@@ -56,8 +54,99 @@ namespace carbot_hardware{
       int32_t timeout_ms = 0;
     };
 
+    struct BidirectionalDevice{
+        std::string device = "";
+        std::string message_type = "";
+        std::string type_value = "";
+        
+        double value = 0;
+
+        void apply(ArduinoComms::ArduinoMessage message){
+            if(message.device != device)
+                return;
+
+            type_value = message.type_value;
+            value = message.value;
+        }
+
+        ArduinoComms::ArduinoMessage send_message(double value){
+            return ArduinoComms::ArduinoMessage{
+                .device = device,
+                .message_type = message_type,
+                .type_value = type_value,
+                .value = value
+            };
+        }
+    };
+
+    struct Sensor{
+        std::string device = "";
+        std::string type_value = "";
+        
+        double value = 0;
+
+        void apply(ArduinoComms::ArduinoMessage message){
+            if(message.device != device)
+                return;
+
+            type_value = message.type_value;
+            value = message.value;
+        }
+    };
+
+    struct Motor{
+      std::string device = "";
+      std::string control_mode = ""; //if message_type is control
+      double control_value = 0; //when message_type is control,  then command_value = value of packet
+
+      double position = 0;
+      double velocity = 0;
+      double effort = 0;
+
+      void apply(ArduinoComms::ArduinoMessage message){
+            
+            if(message.device != device)
+                return;
+
+            if(message.message_type == MessageType::STATUS && message.type_value == TypeValue::POSITION)
+                position = message.value;
+            
+            else if(message.message_type == MessageType::STATUS && message.type_value == TypeValue::VELOCITY)
+                velocity = message.value;
+            
+            else if(message.message_type == MessageType::STATUS && message.type_value == TypeValue::EFFORT)
+                effort = message.value;
+                
+            if(message.message_type == MessageType::CONTROL){
+                control_mode = message.type_value; //velocity or position or percent
+                control_value = message.value;
+            }
+        }
+
+        ArduinoComms::ArduinoMessage send_command(std::string mode, double value){
+            return ArduinoComms::ArduinoMessage{
+                .device = device,
+                .message_type = MessageType::CONTROL,
+                .type_value = mode,
+                .value = value
+            };
+        }
+        
+        ArduinoComms::ArduinoMessage config_bound(std::string type, double value){
+            return ArduinoComms::ArduinoMessage{
+                .device = device,
+                .message_type = MessageType::CONFIG,
+                .type_value = type,
+                .value = value
+            };
+        }
+    };
+
     private:
-    
+      // Parameters for the DiffBot simulation
+      double hw_start_sec_;
+      double hw_stop_sec_;
+
       // Store the command for the simulated robot
       std::vector<double> hw_commands_;
       std::vector<double> hw_positions_;
@@ -66,11 +155,11 @@ namespace carbot_hardware{
       ArduinoComms comms;
       Config config;
 
-      hardware_component::Motor drive_motor;
-      hardware_component::Motor steer_motor;
+      Motor drive_motor;
+      Motor steer_motor;
 
-      hardware_component::Sensor voltage_sensor;
-      hardware_component::Sensor heartbeat_monitor;
+      Sensor voltage_sensor;
+      BidirectionalDevice heartbeat_monitor;
 
     public:
       RCLCPP_SHARED_PTR_DEFINITIONS(CarlikeBotSystemHardware);

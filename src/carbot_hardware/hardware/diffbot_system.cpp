@@ -196,7 +196,7 @@ hardware_interface::return_type carbot_hardware ::CarlikeBotSystemHardware::writ
   messages.push_back(drive_motor.send_command(drive_motor.control_mode, drive_motor.control_value));
   messages.push_back(steer_motor.send_command(steer_motor.control_mode, steer_motor.control_value));
 
-  messages.push_back(heartbeat_monitor.send_message(heartbeat_monitor.message_type, heartbeat_monitor.type_value, heartbeat_monitor.value));
+  messages.push_back(heartbeat_monitor.send_message(heartbeat_monitor.value));
 
   //RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), comms.debug(messages).c_str());
 
