@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 import os
 from glob import glob
 
-package_name = 'lane_detector'
+package_name = 'camera_handler'
 
 setup(
     name=package_name,
@@ -21,11 +21,10 @@ setup(
     description='TODO: Package description',
     license='TODO: License declaration',
     tests_require=['pytest'],
-
     entry_points={
         'console_scripts': [
-            'detector_node = lane_detector.src.detection_node:main',
-            'test = lane_detector.detection_model.test:main'
+            'camera_driver = camera_handler.src.driver:main',
+            'camera_compressor = camera_handler.src.compressed:main',
         ],
     },
 )
