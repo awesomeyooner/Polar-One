@@ -5,7 +5,7 @@ from sensor_msgs.msg import CompressedImage
 from std_msgs.msg import Float64
 from cv_bridge import CvBridge
 import cv2 
-from lane_detector.detection_model.utils import Detector
+from utils import Detector
 
 class LaneDetector(Node):
 

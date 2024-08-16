@@ -5,7 +5,7 @@ def generate_launch_description():
     return launch.LaunchDescription([
 
         launch_ros.actions.Node(
-            package='lane_detector',
+            package='camera_handler',
             executable='camera_driver',
             name='camera_driver',
             ),

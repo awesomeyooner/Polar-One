@@ -11,7 +11,7 @@ def generate_launch_description():
         #     ),
 
         launch_ros.actions.Node(
-            package='lane_detector',
+            package='camera_handler',
             executable='camera_compressor',
             name='camera_compressor'
         )
