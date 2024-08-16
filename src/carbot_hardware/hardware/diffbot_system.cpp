@@ -35,6 +35,8 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(const hardw
     return hardware_interface::CallbackReturn::ERROR;
   }
 
+  //=======================================================
+
   config.port = info_.hardware_parameters["port"];
 
   config.drive_id = info_.hardware_parameters["drive_id"];
@@ -48,6 +50,8 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(const hardw
   config.loop_rate = std::stoi(info_.hardware_parameters["loop_rate"]);
   config.timeout_ms = std::stoi(info_.hardware_parameters["timeout_ms"]);
 
+  //=======================================================
+
   drive_motor.device = config.drive_id;
   drive_motor.control_mode = TypeValue::EFFORT;
 
@@ -59,6 +63,8 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(const hardw
   heartbeat_monitor.device = config.heartbeat_id;
   heartbeat_monitor.message_type = MessageType::STATUS;
   heartbeat_monitor.type_value = TypeValue::RAW;
+
+  //=======================================================
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
@@ -143,7 +149,7 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_activate(const r
   RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "Activating ...please wait...");
   comms.connect(config.port, config.baud_rate, config.timeout_ms);
 
-  std::vector<ArduinoComms::ArduinoMessage> messages;
+  std::vector<ArduinoUtility::ArduinoMessage> messages;
 
   messages.push_back(drive_motor.config_bound(TypeValue::LOWER_BOUND, MotorConstants::MAX_REVERSE));
   messages.push_back(drive_motor.config_bound(TypeValue::UPPER_BOUND, MotorConstants::MAX_FORWARD));
@@ -171,9 +177,9 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_deactivate(const
 hardware_interface::return_type CarlikeBotSystemHardware::read(const rclcpp::Time & /*time*/, const rclcpp::Duration & period){
 
   //RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), comms.debug().c_str());
-  std::vector<ArduinoComms::ArduinoMessage> messages = comms.get_message_dump();
+  std::vector<ArduinoUtility::ArduinoMessage> messages = comms.get_message_dump();
  
-  for(ArduinoComms::ArduinoMessage message : messages){
+  for(ArduinoUtility::ArduinoMessage message : messages){
     drive_motor.apply(message);
     steer_motor.apply(message);
 
@@ -185,12 +191,12 @@ hardware_interface::return_type CarlikeBotSystemHardware::read(const rclcpp::Tim
 }
 
 hardware_interface::return_type carbot_hardware ::CarlikeBotSystemHardware::write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/){
-  std::vector<ArduinoComms::ArduinoMessage> messages;
+  std::vector<ArduinoUtility::ArduinoMessage> messages;
 
   messages.push_back(drive_motor.send_command(drive_motor.control_mode, drive_motor.control_value));
   messages.push_back(steer_motor.send_command(steer_motor.control_mode, steer_motor.control_value));
 
-  messages.push_back(heartbeat_monitor.send_message(heartbeat_monitor.value));
+  messages.push_back(heartbeat_monitor.send_message(heartbeat_monitor.message_type, heartbeat_monitor.type_value, heartbeat_monitor.value));
 
   //RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), comms.debug(messages).c_str());
 

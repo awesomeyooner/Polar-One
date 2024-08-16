@@ -4,27 +4,42 @@
 #include <nlohmann/json.hpp>
 
 #include "Device.hpp"
+#include "carbot_hardware/arduino_interface_types.hpp"
 
 using json = nlohmann::json;
 
+namespace hardware_component{
 
-class Sensor : public Device{
+    class Sensor : public Device{
 
-    private:
+        private:
 
-    public:
+        public:
 
-        std::string device;
-        std::string type_value;
-        double value;
+            std::string message_type;
+            std::string type_value;
+            double value;
 
-        void apply(ArduinoComms::ArduinoMessage message) override{
-            if(message.device != device)
-                return;
+            Sensor() = default;
 
-            type_value = message.type_value;
-            value = message.value;
-        }
-};
+            void apply(ArduinoUtility::ArduinoMessage message){
+                if(message.device != device)
+                    return;
+
+                type_value = message.type_value;
+                value = message.value;
+            }
+
+            virtual ArduinoUtility::ArduinoMessage send_message(std::string message_type, std::string type_value, double value){
+                return ArduinoUtility::ArduinoMessage{
+                    .device = device,
+                    .message_type = message_type,
+                    .type_value = type_value,
+                    .value = value
+                };
+            }
+            
+    };
+}
 
 #endif
