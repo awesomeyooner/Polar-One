@@ -35,8 +35,7 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(const hardw
     return hardware_interface::CallbackReturn::ERROR;
   }
 
-  //=======================================================
-
+  //set values to config
   config.port = info_.hardware_parameters["port"];
 
   config.drive_id = info_.hardware_parameters["drive_id"];
@@ -51,17 +50,8 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(const hardw
   config.timeout_ms = std::stoi(info_.hardware_parameters["timeout_ms"]);
 
   //=======================================================
-
-  drive_motor.device = config.drive_id;
-  drive_motor.control_mode = TypeValue::EFFORT;
-
-  steer_motor.device = config.steer_id;
-  steer_motor.control_mode = TypeValue::EFFORT;
-
-  voltage_sensor.device = config.voltage_sensor_id;
-
+  
   heartbeat_monitor.device = config.heartbeat_id;
-  heartbeat_monitor.message_type = MessageType::STATUS;
   heartbeat_monitor.type_value = TypeValue::RAW;
 
   //=======================================================
@@ -193,10 +183,10 @@ hardware_interface::return_type CarlikeBotSystemHardware::read(const rclcpp::Tim
 hardware_interface::return_type carbot_hardware ::CarlikeBotSystemHardware::write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/){
   std::vector<ArduinoUtility::ArduinoMessage> messages;
 
-  messages.push_back(drive_motor.send_command(drive_motor.control_mode, drive_motor.control_value));
-  messages.push_back(steer_motor.send_command(steer_motor.control_mode, steer_motor.control_value));
+  messages.push_back(drive_motor.send_command());
+  messages.push_back(steer_motor.send_command());
 
-  messages.push_back(heartbeat_monitor.send_message(heartbeat_monitor.message_type, heartbeat_monitor.type_value, heartbeat_monitor.value));
+  messages.push_back(heartbeat_monitor.send_message());
 
   //RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), comms.debug(messages).c_str());
 

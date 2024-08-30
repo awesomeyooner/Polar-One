@@ -16,7 +16,6 @@ namespace hardware_component{
 
         public:
 
-            std::string message_type;
             std::string type_value;
             double value;
 
@@ -30,13 +29,17 @@ namespace hardware_component{
                 value = message.value;
             }
 
-            virtual ArduinoUtility::ArduinoMessage send_message(std::string message_type, std::string type_value, double value){
+            ArduinoUtility::ArduinoMessage send_message(std::string type_value, double value){
                 return ArduinoUtility::ArduinoMessage{
                     .device = device,
-                    .message_type = message_type,
+                    .message_type = MessageType::STATUS,
                     .type_value = type_value,
                     .value = value
                 };
+            }
+
+            ArduinoUtility::ArduinoMessage send_message(){
+                send_message(type_value, value);
             }
             
     };

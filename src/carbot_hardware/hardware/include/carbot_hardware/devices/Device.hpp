@@ -6,6 +6,11 @@
 
 namespace hardware_component{
 
+    struct InterfaceValue{
+        std::string interface_type = "";
+        double value = 0;
+    };
+
     class Device{
 
         private:

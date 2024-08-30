@@ -40,6 +40,10 @@ namespace hardware_component{
                 }
             }
 
+            ArduinoUtility::ArduinoMessage send_command(){
+                send_command(control_mode, control_value);
+            }
+
             ArduinoUtility::ArduinoMessage send_command(std::string mode, double value){
                 return ArduinoUtility::ArduinoMessage{
                     .device = device,

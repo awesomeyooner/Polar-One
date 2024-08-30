@@ -39,9 +39,7 @@
 
 namespace carbot_hardware{
 
-  class CarlikeBotSystemHardware : public hardware_interface::SystemInterface{
-
-    struct Config{
+  struct Config{
       std::string port = "";
 
       std::string drive_id = "";
@@ -54,7 +52,9 @@ namespace carbot_hardware{
       int32_t baud_rate = 0;
       int32_t loop_rate = 0;
       int32_t timeout_ms = 0;
-    };
+  };
+    
+  class CarlikeBotSystemHardware : public hardware_interface::SystemInterface{
 
     private:
     
