@@ -1,3 +1,6 @@
+#ifndef CONSTANTS_CONSTANTS_HPP
+#define CONSTANTS_CONSTANTS_HPP
+
 #include <string>
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 
@@ -29,3 +32,4 @@ namespace VoltageSensorConstants{
   const int CHANNEL = 1;
 }
  
+#endif

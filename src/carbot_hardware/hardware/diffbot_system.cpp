@@ -49,6 +49,7 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(const hardw
   config.loop_rate = std::stoi(info_.hardware_parameters["loop_rate"]);
   config.timeout_ms = std::stoi(info_.hardware_parameters["timeout_ms"]);
 
+  superstructure.initialize(config);
   //=======================================================
   
   heartbeat_monitor.device = config.heartbeat_id;
@@ -59,42 +60,9 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(const hardw
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
-std::vector<hardware_interface::StateInterface> CarlikeBotSystemHardware::export_state_interfaces()
-{
-  std::vector<hardware_interface::StateInterface> state_interfaces;
+std::vector<hardware_interface::StateInterface> CarlikeBotSystemHardware::export_state_interfaces(){
+  std::vector<hardware_interface::StateInterface> state_interfaces = superstructure.getStateInterfaces();
   
-  //======drive motor=======
-  state_interfaces.emplace_back(hardware_interface::StateInterface(
-    drive_motor.device, 
-    hardware_interface::HW_IF_VELOCITY, 
-    &drive_motor.velocity
-    ));
-
-  state_interfaces.emplace_back(hardware_interface::StateInterface(
-    drive_motor.device, 
-    hardware_interface::HW_IF_POSITION, 
-    &drive_motor.position
-    ));
-
-  state_interfaces.emplace_back(hardware_interface::StateInterface(
-    drive_motor.device, 
-    hardware_interface::HW_IF_EFFORT, 
-    &drive_motor.effort
-    ));
-
-  //======steer motor=========
-  state_interfaces.emplace_back(hardware_interface::StateInterface(
-    steer_motor.device, 
-    hardware_interface::HW_IF_POSITION, 
-    &steer_motor.position
-    ));
-
-  state_interfaces.emplace_back(hardware_interface::StateInterface(
-    steer_motor.device, 
-    hardware_interface::HW_IF_EFFORT, 
-    &steer_motor.effort
-    ));
-
   //=====voltage sensor=====
   state_interfaces.emplace_back(hardware_interface::StateInterface(
     voltage_sensor.device,
@@ -109,47 +77,18 @@ std::vector<hardware_interface::StateInterface> CarlikeBotSystemHardware::export
     &heartbeat_monitor.value
   ));
 
-
   return state_interfaces;
 }
 
-std::vector<hardware_interface::CommandInterface> CarlikeBotSystemHardware::export_command_interfaces()
-{
-  std::vector<hardware_interface::CommandInterface> command_interfaces;
- 
-  //====drive motor=====
-  command_interfaces.emplace_back(hardware_interface::CommandInterface(
-    drive_motor.device,
-    hardware_interface::HW_IF_VELOCITY,
-    &drive_motor.control_value
-  ));
-
-  //====steer motor=====
-  command_interfaces.emplace_back(hardware_interface::CommandInterface(
-    steer_motor.device,
-    hardware_interface::HW_IF_POSITION,
-    &steer_motor.control_value
-  ));
-
-  return command_interfaces;
+std::vector<hardware_interface::CommandInterface> CarlikeBotSystemHardware::export_command_interfaces(){
+  return superstructure.getCommandInterfaces();
 }
-
 
 hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_activate(const rclcpp_lifecycle::State & /*previous_state*/){
   RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "Activating ...please wait...");
   comms.connect(config.port, config.baud_rate, config.timeout_ms);
 
-  std::vector<ArduinoUtility::ArduinoMessage> messages;
-
-  messages.push_back(drive_motor.config_bound(TypeValue::LOWER_BOUND, MotorConstants::MAX_REVERSE));
-  messages.push_back(drive_motor.config_bound(TypeValue::UPPER_BOUND, MotorConstants::MAX_FORWARD));
-  messages.push_back(drive_motor.config_bound(TypeValue::NEUTRAL, MotorConstants::NEUTRAL));
-
-  messages.push_back(steer_motor.config_bound(TypeValue::LOWER_BOUND, ServoConstants::MAX_RIGHT));
-  messages.push_back(steer_motor.config_bound(TypeValue::UPPER_BOUND, ServoConstants::MAX_LEFT));
-  messages.push_back(steer_motor.config_bound(TypeValue::NEUTRAL, ServoConstants::NEUTRAL));
-
-  comms.send_message(messages); 
+  comms.send_message(superstructure.config_devices()); 
   
   RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "Successfully activated!");
 
@@ -166,29 +105,19 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_deactivate(const
 
 hardware_interface::return_type CarlikeBotSystemHardware::read(const rclcpp::Time & /*time*/, const rclcpp::Duration & period){
 
-  //RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), comms.debug().c_str());
   std::vector<ArduinoUtility::ArduinoMessage> messages = comms.get_message_dump();
  
   for(ArduinoUtility::ArduinoMessage message : messages){
-    drive_motor.apply(message);
-    steer_motor.apply(message);
-
-    voltage_sensor.apply(message);
-    heartbeat_monitor.apply(message);
+    superstructure.applyToAll(message);
   }
 
   return hardware_interface::return_type::OK;
 }
 
 hardware_interface::return_type carbot_hardware ::CarlikeBotSystemHardware::write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/){
-  std::vector<ArduinoUtility::ArduinoMessage> messages;
-
-  messages.push_back(drive_motor.send_command());
-  messages.push_back(steer_motor.send_command());
+  std::vector<ArduinoUtility::ArduinoMessage> messages = superstructure.getCommands();
 
   messages.push_back(heartbeat_monitor.send_message());
-
-  //RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), comms.debug(messages).c_str());
 
   comms.send_message(messages); 
 

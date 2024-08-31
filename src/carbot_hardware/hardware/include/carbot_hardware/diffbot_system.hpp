@@ -37,6 +37,8 @@
 #include "devices/Motor.hpp"
 #include "devices/Sensor.hpp"
 
+#include "subsystems/Superstructure.hpp"
+
 namespace carbot_hardware{
 
   struct Config{
@@ -57,17 +59,11 @@ namespace carbot_hardware{
   class CarlikeBotSystemHardware : public hardware_interface::SystemInterface{
 
     private:
-    
-      // Store the command for the simulated robot
-      std::vector<double> hw_commands_;
-      std::vector<double> hw_positions_;
-      std::vector<double> hw_velocities_;
-
+  
       ArduinoComms comms;
       Config config;
 
-      hardware_component::Motor drive_motor;
-      hardware_component::Motor steer_motor;
+      subsystem::Superstructure superstructure;
 
       hardware_component::Sensor voltage_sensor;
       hardware_component::Sensor heartbeat_monitor;

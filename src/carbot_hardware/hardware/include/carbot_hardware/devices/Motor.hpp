@@ -4,6 +4,8 @@
 #include "Device.hpp"
 #include "nlohmann/json.hpp"
 #include "carbot_hardware/arduino_interface_types.hpp"
+#include "hardware_interface/lexical_casts.hpp"
+#include "hardware_interface/types/hardware_interface_type_values.hpp"
 
 using json = nlohmann::json;
 
@@ -12,14 +14,13 @@ namespace hardware_component{
     class Motor : public Device{
 
         public:
-            std::string control_mode;
-            double control_value; 
+            hardware_component::InterfaceValue command = {MessageType::UNCONFIGURED};
 
-            double position = 0;
-            double velocity = 0;
-            double effort = 0;
+            hardware_component::InterfaceValue position = {hardware_interface::HW_IF_POSITION};
+            hardware_component::InterfaceValue velocity = {hardware_interface::HW_IF_VELOCITY};
+            hardware_component::InterfaceValue effort = {hardware_interface::HW_IF_EFFORT};
 
-            Motor() = default;
+            Motor(const std::string& command_interface) : Device(), command{command_interface, 0}{}
             
             void apply(ArduinoUtility::ArduinoMessage message){
                 if(message.device != device)
@@ -27,21 +28,16 @@ namespace hardware_component{
 
                 if(message.message_type == MessageType::STATUS){
                     if(message.type_value == TypeValue::POSITION)
-                        position = message.value;
+                        position.value = message.value;
                     else if(message.type_value == TypeValue::VELOCITY)
-                        velocity = message.value;
+                        velocity.value = message.value;
                     else if(message.type_value == TypeValue::EFFORT)
-                        effort = message.value;
-                }
-
-                else if(message.message_type == MessageType::CONTROL){
-                    control_mode = message.type_value;
-                    control_value = message.value;
+                        effort.value = message.value;
                 }
             }
 
             ArduinoUtility::ArduinoMessage send_command(){
-                send_command(control_mode, control_value);
+                return send_command(command.interface_type, command.value);
             }
 
             ArduinoUtility::ArduinoMessage send_command(std::string mode, double value){
@@ -51,6 +47,22 @@ namespace hardware_component{
                     .type_value = mode,
                     .value = value
                 };
+            }
+
+            hardware_interface::StateInterface getStateInterface(hardware_component::InterfaceValue wanted){
+                return hardware_interface::StateInterface(
+                    device,
+                    wanted.interface_type,
+                    &wanted.value
+                );
+            }
+
+            hardware_interface::CommandInterface getCommandInterfaces(hardware_component::InterfaceValue wanted){
+                return hardware_interface::CommandInterface(
+                    device,
+                    wanted.interface_type,
+                    &wanted.value
+                );
             }
 
             ArduinoUtility::ArduinoMessage config_bound(std::string type, double value){

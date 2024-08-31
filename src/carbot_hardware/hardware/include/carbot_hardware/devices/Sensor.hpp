@@ -39,7 +39,7 @@ namespace hardware_component{
             }
 
             ArduinoUtility::ArduinoMessage send_message(){
-                send_message(type_value, value);
+                return send_message(type_value, value);
             }
             
     };

@@ -7,8 +7,8 @@
 #include "carbot_hardware/devices/Motor.hpp"
 #include "carbot_hardware/devices/Sensor.hpp"
 #include "carbot_hardware/constants.hpp"
-#include "carbot_hardware/hardware/include/carbot_hardware/diffbot_system.hpp"
-#include "carbot_hardware/hardware/include/carbot_hardware/constants.hpp"
+#include "carbot_hardware/diffbot_system.hpp"
+#include "carbot_hardware/constants.hpp"
 #include "hardware_interface/handle.hpp"
 
 namespace subsystem{
@@ -16,43 +16,75 @@ namespace subsystem{
     class Drive : public Subsystem{
 
         private:
-
-        public:
             hardware_component::Motor drive_motor;
             hardware_component::Motor steer_motor;
-            
 
-            Drive(carbot_hardware::Config config) : Subsystem(){
+            std::vector<hardware_component::Device> devices;
+
+        public:         
+  
+            Drive() : Subsystem(),
+             drive_motor(hardware_interface::HW_IF_VELOCITY), 
+             steer_motor(hardware_interface::HW_IF_POSITION){
+
+                devices.emplace_back(drive_motor);
+                devices.emplace_back(steer_motor);
+            }
+
+            void initialize(carbot_hardware::Config config){
                 drive_motor.device = config.drive_id;
                 steer_motor.device = config.steer_id;
-
-                drive_motor.control_mode = MotorConstants::COMMAND_INTERFACE;
-                steer_motor.control_mode = ServoConstants::COMMAND_INTERFACE;
             }
 
             std::vector<ArduinoUtility::ArduinoMessage> getCommands(){
-            }
+                std::vector<ArduinoUtility::ArduinoMessage> commands;
 
-            std::vector<ArduinoUtility::ArduinoMessage> getStates(){
+                commands.emplace_back(drive_motor.send_command());
+                commands.emplace_back(steer_motor.send_command());
 
+                return commands;
             }
 
             std::vector<hardware_interface::StateInterface> getStateInterfaces(){
                 std::vector<hardware_interface::StateInterface> state_interfaces;
 
-                state_interfaces.emplace_back(
-                    drive_motor.device,
-                    hardware_interface::HW_IF_VELOCITY,
-                    &drive_motor.velocity
-                );
+                state_interfaces.emplace_back(drive_motor.getStateInterface(drive_motor.velocity));
+                state_interfaces.emplace_back(drive_motor.getStateInterface(drive_motor.position));
+                state_interfaces.emplace_back(drive_motor.getStateInterface(drive_motor.effort));
+
+                state_interfaces.emplace_back(steer_motor.getStateInterface(steer_motor.position));
+                state_interfaces.emplace_back(steer_motor.getStateInterface(steer_motor.effort));
+
+                return state_interfaces;
+            }
+
+            std::vector<hardware_interface::CommandInterface> getCommandInterfaces(){
+                std::vector<hardware_interface::CommandInterface> command_interfaces;
+
+                command_interfaces.emplace_back(drive_motor.getCommandInterfaces(drive_motor.command));
+                command_interfaces.emplace_back(steer_motor.getCommandInterfaces(steer_motor.command));
+
+                return command_interfaces;
             }
 
             void applyToAll(ArduinoUtility::ArduinoMessage message){
-
+                for(hardware_component::Device device : devices){
+                    device.apply(message);
+                }
             }
 
-            void config_devices(){
-                
+            std::vector<ArduinoUtility::ArduinoMessage> config_devices(){
+                std::vector<ArduinoUtility::ArduinoMessage> messages;
+
+                messages.push_back(drive_motor.config_bound(TypeValue::LOWER_BOUND, MotorConstants::MAX_REVERSE));
+                messages.push_back(drive_motor.config_bound(TypeValue::UPPER_BOUND, MotorConstants::MAX_FORWARD));
+                messages.push_back(drive_motor.config_bound(TypeValue::NEUTRAL, MotorConstants::NEUTRAL));
+
+                messages.push_back(steer_motor.config_bound(TypeValue::LOWER_BOUND, ServoConstants::MAX_RIGHT));
+                messages.push_back(steer_motor.config_bound(TypeValue::UPPER_BOUND, ServoConstants::MAX_LEFT));
+                messages.push_back(steer_motor.config_bound(TypeValue::NEUTRAL, ServoConstants::NEUTRAL));
+
+                return messages;
             }
 
     };

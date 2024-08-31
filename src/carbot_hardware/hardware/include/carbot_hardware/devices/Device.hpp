@@ -3,12 +3,17 @@
 
 #include "carbot_hardware/arduino_comms.hpp"
 #include "carbot_hardware/arduino_interface_types.hpp"
+#include <string>
 
 namespace hardware_component{
 
     struct InterfaceValue{
-        std::string interface_type = "";
-        double value = 0;
+        std::string interface_type;
+        double value;
+
+        InterfaceValue(std::string if_type, double val) : interface_type(if_type), value(val){}
+        InterfaceValue(std::string if_type) : interface_type(if_type), value(0.0){}
+        InterfaceValue() : interface_type(""), value(0.0){}
     };
 
     class Device{
@@ -17,7 +22,7 @@ namespace hardware_component{
 
         public:
 
-            Device() = default;
+            Device(){}
 
             virtual ArduinoUtility::ArduinoMessage send_message(std::string message_type, std::string type_value, double value){
                 return ArduinoUtility::ArduinoMessage{
