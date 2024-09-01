@@ -44,13 +44,13 @@ namespace subsystem{
 
                 for(subsystem::Subsystem* subsystem : subsystems){
                     std::vector<ArduinoUtility::ArduinoMessage> currentCommandPacket = subsystem->getMessagesToSend();
-
+                    
                     commands.insert(commands.end(), currentCommandPacket.begin(), currentCommandPacket.end());
                 }
 
                 //RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), std::to_string(drive.getMessagesToSend().at(0).value).c_str());
 
-                return drive.getMessagesToSend();
+                return commands;
             }
 
             std::vector<hardware_interface::StateInterface> getStateInterfaces() override{
