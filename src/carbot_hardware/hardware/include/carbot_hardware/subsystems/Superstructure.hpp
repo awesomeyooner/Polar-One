@@ -11,6 +11,8 @@
 #include "carbot_hardware/constants.hpp"
 #include "hardware_interface/handle.hpp"
 #include "Drive.hpp"
+#include "SystemManager.hpp"
+#include <iterator>
 
 namespace subsystem{
 
@@ -19,11 +21,13 @@ namespace subsystem{
         private:
             std::vector<subsystem::Subsystem> subsystems;
 
+            //subsystem::SystemManager system_manager;
             subsystem::Drive drive;
-
+            
         public:         
   
             Superstructure() : Subsystem(){
+                //subsystems.emplace_back(system_manager);
                 subsystems.emplace_back(drive);
             }
 
@@ -33,11 +37,11 @@ namespace subsystem{
                 }
             }
 
-            std::vector<ArduinoUtility::ArduinoMessage> getCommands() override{
+            std::vector<ArduinoUtility::ArduinoMessage> getMessagesToSend() override{
                 std::vector<ArduinoUtility::ArduinoMessage> commands;
 
                 for(subsystem::Subsystem subsystem : subsystems){
-                    std::vector<ArduinoUtility::ArduinoMessage> currentCommandPacket = subsystem.getCommands();
+                    std::vector<ArduinoUtility::ArduinoMessage> currentCommandPacket = subsystem.getMessagesToSend();
 
                     commands.insert(commands.end(), currentCommandPacket.begin(), currentCommandPacket.end());
                 }
@@ -51,7 +55,9 @@ namespace subsystem{
                 for(subsystem::Subsystem subsystem : subsystems){
                     std::vector<hardware_interface::StateInterface> currentStateInterface = subsystem.getStateInterfaces();
 
-                    //state_interfaces.insert(state_interfaces.end(), currentStateInterface.begin(), currentStateInterface.end());
+                    for(int i = 0; i < currentStateInterface.size(); i++){
+                        state_interfaces.emplace_back(currentStateInterface.at(i));
+                    }
                 }
 
                 return state_interfaces;
@@ -60,13 +66,13 @@ namespace subsystem{
             std::vector<hardware_interface::CommandInterface> getCommandInterfaces() override{
                 std::vector<hardware_interface::CommandInterface> command_interfaces;
 
-                for(subsystem::Subsystem subsystem : subsystems){
-                    std::vector<hardware_interface::CommandInterface> currentCommandInterface = subsystem.getCommandInterfaces();
+                // for(subsystem::Subsystem subsystem : subsystems){
+                //     std::vector<hardware_interface::CommandInterface> currentCommandInterface = subsystem.getCommandInterfaces();
                     
-                    //command_interfaces.insert(command_interfaces.end(), currentCommandInterface.begin(), currentCommandInterface.end());
-
-                    return subsystem.getCommandInterfaces();
-                }
+                //     for(int i = 0; i < currentCommandInterface.size(); i++){
+                //         command_interfaces.emplace_back(currentCommandInterface.at(i));
+                //     }
+                // }
 
                 return command_interfaces;
             }

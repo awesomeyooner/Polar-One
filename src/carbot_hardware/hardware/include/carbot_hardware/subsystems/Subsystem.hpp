@@ -17,7 +17,7 @@ namespace subsystem{
 
             Subsystem(){}
 
-            virtual std::vector<ArduinoUtility::ArduinoMessage> getCommands(){return {};}
+            virtual std::vector<ArduinoUtility::ArduinoMessage> getMessagesToSend(){return {};}
         
             virtual std::vector<hardware_interface::StateInterface> getStateInterfaces(){return {};};
             virtual std::vector<hardware_interface::CommandInterface> getCommandInterfaces(){return {};}

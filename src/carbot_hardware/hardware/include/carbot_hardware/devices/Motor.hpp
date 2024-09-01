@@ -36,11 +36,11 @@ namespace hardware_component{
                 }
             }
 
-            ArduinoUtility::ArduinoMessage send_command(){
-                return send_command(command.interface_type, command.value);
+            ArduinoUtility::ArduinoMessage send_message(){
+                return send_message(command.interface_type, command.value);
             }
 
-            ArduinoUtility::ArduinoMessage send_command(std::string mode, double value){
+            ArduinoUtility::ArduinoMessage send_message(std::string mode, double value){
                 return ArduinoUtility::ArduinoMessage{
                     .device = device,
                     .message_type = MessageType::CONTROL,

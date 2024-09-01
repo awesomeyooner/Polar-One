@@ -36,13 +36,13 @@ namespace subsystem{
                 steer_motor.device = config.steer_id;
             }
 
-            std::vector<ArduinoUtility::ArduinoMessage> getCommands() override{
-                std::vector<ArduinoUtility::ArduinoMessage> commands;
+            std::vector<ArduinoUtility::ArduinoMessage> getMessagesToSend() override{
+                std::vector<ArduinoUtility::ArduinoMessage> messages;
 
-                commands.emplace_back(drive_motor.send_command());
-                commands.emplace_back(steer_motor.send_command());
+                messages.emplace_back(drive_motor.send_message());
+                messages.emplace_back(steer_motor.send_message());
 
-                return commands;
+                return messages;
             }
 
             std::vector<hardware_interface::StateInterface> getStateInterfaces() override{

@@ -50,32 +50,12 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(const hardw
   config.timeout_ms = std::stoi(info_.hardware_parameters["timeout_ms"]);
 
   superstructure.initialize(config);
-  //=======================================================
-  
-  heartbeat_monitor.device = config.heartbeat_id;
-  heartbeat_monitor.type_value = TypeValue::RAW;
-
-  //=======================================================
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }
 
 std::vector<hardware_interface::StateInterface> CarlikeBotSystemHardware::export_state_interfaces(){
   std::vector<hardware_interface::StateInterface> state_interfaces = superstructure.getStateInterfaces();
-  
-  //=====voltage sensor=====
-  state_interfaces.emplace_back(hardware_interface::StateInterface(
-    voltage_sensor.device,
-    TypeValue::VOLTAGE,
-    &voltage_sensor.value
-  ));
-
-  //======heartbeat=======
-  state_interfaces.emplace_back(hardware_interface::StateInterface(
-    heartbeat_monitor.device,
-    TypeValue::RAW,
-    &heartbeat_monitor.value
-  ));
 
   return state_interfaces;
 }
@@ -115,7 +95,7 @@ hardware_interface::return_type CarlikeBotSystemHardware::read(const rclcpp::Tim
 }
 
 hardware_interface::return_type carbot_hardware ::CarlikeBotSystemHardware::write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/){
-  std::vector<ArduinoUtility::ArduinoMessage> messages = superstructure.getCommands();
+  std::vector<ArduinoUtility::ArduinoMessage> messages = superstructure.getMessagesToSend();
 
   messages.push_back(heartbeat_monitor.send_message());
 

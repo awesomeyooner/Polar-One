@@ -23,6 +23,9 @@ namespace hardware_component{
         public:
 
             Device(){}
+            
+            virtual std::vector<hardware_interface::StateInterface> getStateInterfaces(){return {};};
+            virtual std::vector<hardware_interface::CommandInterface> getCommandInterfaces(){return {};}
 
             virtual ArduinoUtility::ArduinoMessage send_message(std::string message_type, std::string type_value, double value){
                 return ArduinoUtility::ArduinoMessage{
@@ -36,7 +39,7 @@ namespace hardware_component{
             virtual void apply(ArduinoUtility::ArduinoMessage message){}
 
             std::string device;
-            double value;
+            
 
 
     };
