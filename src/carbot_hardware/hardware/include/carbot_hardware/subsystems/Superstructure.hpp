@@ -27,13 +27,13 @@ namespace subsystem{
                 subsystems.emplace_back(drive);
             }
 
-            void initialize(carbot_hardware::Config config){
+            void initialize(ArduinoUtility::Config config) override{
                 for(subsystem::Subsystem subsystem : subsystems){
                     subsystem.initialize(config);
                 }
             }
 
-            std::vector<ArduinoUtility::ArduinoMessage> getCommands(){
+            std::vector<ArduinoUtility::ArduinoMessage> getCommands() override{
                 std::vector<ArduinoUtility::ArduinoMessage> commands;
 
                 for(subsystem::Subsystem subsystem : subsystems){
@@ -45,37 +45,39 @@ namespace subsystem{
                 return commands;
             }
 
-            std::vector<hardware_interface::StateInterface> getStateInterfaces(){
+            std::vector<hardware_interface::StateInterface> getStateInterfaces() override{
                 std::vector<hardware_interface::StateInterface> state_interfaces;
 
                 for(subsystem::Subsystem subsystem : subsystems){
                     std::vector<hardware_interface::StateInterface> currentStateInterface = subsystem.getStateInterfaces();
 
-                    state_interfaces.insert(state_interfaces.end(), currentStateInterface.begin(), currentStateInterface.end());
+                    //state_interfaces.insert(state_interfaces.end(), currentStateInterface.begin(), currentStateInterface.end());
                 }
 
                 return state_interfaces;
             }
 
-            std::vector<hardware_interface::CommandInterface> getCommandInterfaces(){
+            std::vector<hardware_interface::CommandInterface> getCommandInterfaces() override{
                 std::vector<hardware_interface::CommandInterface> command_interfaces;
 
                 for(subsystem::Subsystem subsystem : subsystems){
                     std::vector<hardware_interface::CommandInterface> currentCommandInterface = subsystem.getCommandInterfaces();
+                    
+                    //command_interfaces.insert(command_interfaces.end(), currentCommandInterface.begin(), currentCommandInterface.end());
 
-                    command_interfaces.insert(command_interfaces.end(), currentCommandInterface.begin(), currentCommandInterface.end());
+                    return subsystem.getCommandInterfaces();
                 }
 
                 return command_interfaces;
             }
 
-            void applyToAll(ArduinoUtility::ArduinoMessage message){
+            void applyToAll(ArduinoUtility::ArduinoMessage message) override{
                 for(subsystem::Subsystem subsystem : subsystems){
                     subsystem.applyToAll(message);
                 }
             }
 
-            std::vector<ArduinoUtility::ArduinoMessage> config_devices(){
+            std::vector<ArduinoUtility::ArduinoMessage> configDevices() override{
                 std::vector<ArduinoUtility::ArduinoMessage> messages;
 
                 for(subsystem::Subsystem subsystem : subsystems){

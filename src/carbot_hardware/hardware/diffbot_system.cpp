@@ -88,7 +88,7 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_activate(const r
   RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "Activating ...please wait...");
   comms.connect(config.port, config.baud_rate, config.timeout_ms);
 
-  comms.send_message(superstructure.config_devices()); 
+  comms.send_message(superstructure.configDevices()); 
   
   RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "Successfully activated!");
 

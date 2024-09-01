@@ -31,12 +31,12 @@ namespace subsystem{
                 devices.emplace_back(steer_motor);
             }
 
-            void initialize(carbot_hardware::Config config){
+            void initialize(ArduinoUtility::Config config) override{
                 drive_motor.device = config.drive_id;
                 steer_motor.device = config.steer_id;
             }
 
-            std::vector<ArduinoUtility::ArduinoMessage> getCommands(){
+            std::vector<ArduinoUtility::ArduinoMessage> getCommands() override{
                 std::vector<ArduinoUtility::ArduinoMessage> commands;
 
                 commands.emplace_back(drive_motor.send_command());
@@ -45,7 +45,7 @@ namespace subsystem{
                 return commands;
             }
 
-            std::vector<hardware_interface::StateInterface> getStateInterfaces(){
+            std::vector<hardware_interface::StateInterface> getStateInterfaces() override{
                 std::vector<hardware_interface::StateInterface> state_interfaces;
 
                 state_interfaces.emplace_back(drive_motor.getStateInterface(drive_motor.velocity));
@@ -58,7 +58,7 @@ namespace subsystem{
                 return state_interfaces;
             }
 
-            std::vector<hardware_interface::CommandInterface> getCommandInterfaces(){
+            std::vector<hardware_interface::CommandInterface> getCommandInterfaces() override{
                 std::vector<hardware_interface::CommandInterface> command_interfaces;
 
                 command_interfaces.emplace_back(drive_motor.getCommandInterfaces(drive_motor.command));
@@ -67,13 +67,13 @@ namespace subsystem{
                 return command_interfaces;
             }
 
-            void applyToAll(ArduinoUtility::ArduinoMessage message){
+            void applyToAll(ArduinoUtility::ArduinoMessage message) override{
                 for(hardware_component::Device device : devices){
                     device.apply(message);
                 }
             }
 
-            std::vector<ArduinoUtility::ArduinoMessage> config_devices(){
+            std::vector<ArduinoUtility::ArduinoMessage> configDevices() override{
                 std::vector<ArduinoUtility::ArduinoMessage> messages;
 
                 messages.push_back(drive_motor.config_bound(TypeValue::LOWER_BOUND, MotorConstants::MAX_REVERSE));

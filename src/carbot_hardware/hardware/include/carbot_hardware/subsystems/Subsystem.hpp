@@ -24,8 +24,8 @@ namespace subsystem{
 
             virtual std::vector<ArduinoUtility::ArduinoMessage> configDevices(){return {};}
 
-            virtual void initialize(carbot_hardware::Config config){}
-            
+            virtual void initialize(ArduinoUtility::Config config){}
+
             virtual void applyToAll(ArduinoUtility::ArduinoMessage message){}
 
     };

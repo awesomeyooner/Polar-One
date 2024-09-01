@@ -40,28 +40,13 @@
 #include "subsystems/Superstructure.hpp"
 
 namespace carbot_hardware{
-
-  struct Config{
-      std::string port = "";
-
-      std::string drive_id = "";
-      std::string steer_id = "";
-
-      std::string voltage_sensor_id = "";
-
-      std::string heartbeat_id = "";
-
-      int32_t baud_rate = 0;
-      int32_t loop_rate = 0;
-      int32_t timeout_ms = 0;
-  };
     
   class CarlikeBotSystemHardware : public hardware_interface::SystemInterface{
 
     private:
   
       ArduinoComms comms;
-      Config config;
+      ArduinoUtility::Config config;
 
       subsystem::Superstructure superstructure;
 
