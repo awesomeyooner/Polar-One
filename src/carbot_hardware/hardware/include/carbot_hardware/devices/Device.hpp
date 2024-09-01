@@ -4,6 +4,7 @@
 #include "carbot_hardware/arduino_comms.hpp"
 #include "carbot_hardware/arduino_interface_types.hpp"
 #include <string>
+#include "rclcpp/rclcpp.hpp"
 
 namespace hardware_component{
 

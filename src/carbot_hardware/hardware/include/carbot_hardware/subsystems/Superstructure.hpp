@@ -13,6 +13,7 @@
 #include "Drive.hpp"
 #include "SystemManager.hpp"
 #include <iterator>
+#include "rclcpp/rclcpp.hpp"
 
 namespace subsystem{
 
@@ -47,7 +48,9 @@ namespace subsystem{
                     commands.insert(commands.end(), currentCommandPacket.begin(), currentCommandPacket.end());
                 }
 
-                return commands;
+                //RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), std::to_string(drive.getMessagesToSend().at(0).value).c_str());
+
+                return drive.getMessagesToSend();
             }
 
             std::vector<hardware_interface::StateInterface> getStateInterfaces() override{

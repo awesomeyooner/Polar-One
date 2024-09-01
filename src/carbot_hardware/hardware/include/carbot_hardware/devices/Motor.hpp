@@ -42,7 +42,6 @@ namespace hardware_component{
             }
 
             ArduinoUtility::ArduinoMessage send_message(std::string mode, double value){
-                
                 return ArduinoUtility::ArduinoMessage{
                     .device = device,
                     .message_type = MessageType::CONTROL,
