@@ -21,13 +21,13 @@ namespace subsystem{
         private:
             std::vector<subsystem::Subsystem> subsystems;
 
-            //subsystem::SystemManager system_manager;
+            subsystem::SystemManager system_manager;
             subsystem::Drive drive;
             
         public:         
   
             Superstructure() : Subsystem(){
-                //subsystems.emplace_back(system_manager);
+                subsystems.emplace_back(system_manager);
                 subsystems.emplace_back(drive);
             }
 
