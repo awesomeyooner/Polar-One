@@ -19,7 +19,7 @@ namespace subsystem{
             hardware_component::Sensor heartbeat_sensor;
             hardware_component::Sensor voltage_sensor;
 
-            std::vector<hardware_component::Device> devices;
+            std::vector<hardware_component::Device*> devices;
 
         public:         
   
@@ -27,8 +27,8 @@ namespace subsystem{
              heartbeat_sensor(TypeValue::RAW), 
              voltage_sensor(TypeValue::VOLTAGE){
 
-                devices.emplace_back(heartbeat_sensor);
-                devices.emplace_back(voltage_sensor);
+                devices.emplace_back(&heartbeat_sensor);
+                devices.emplace_back(&voltage_sensor);
             }
 
             void initialize(ArduinoUtility::Config config) override{
@@ -39,7 +39,9 @@ namespace subsystem{
             std::vector<ArduinoUtility::ArduinoMessage> getMessagesToSend() override{
                 std::vector<ArduinoUtility::ArduinoMessage> messages;
 
-                messages.emplace_back(heartbeat_sensor.send_message());
+                for(hardware_component::Device* device : devices){
+                    messages.emplace_back(device->send_message());
+                }
 
                 return messages;
             }
@@ -54,8 +56,9 @@ namespace subsystem{
             }
 
             void applyToAll(ArduinoUtility::ArduinoMessage message) override{
-                for(hardware_component::Device device : devices){
-                    device.apply(message);
+
+                for(hardware_component::Device* device : devices){
+                    device->apply(message);
                 }
             }
     };

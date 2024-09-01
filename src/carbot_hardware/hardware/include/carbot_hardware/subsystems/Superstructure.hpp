@@ -19,28 +19,30 @@ namespace subsystem{
     class Superstructure : public Subsystem{
 
         private:
-            std::vector<subsystem::Subsystem> subsystems;
+            std::vector<subsystem::Subsystem*> subsystems;
 
-            
-            
-        public:         
             subsystem::SystemManager system_manager;
             subsystem::Drive drive;
+            
+        public:         
   
             Superstructure() : Subsystem(){
-                subsystems.emplace_back(system_manager);
-                subsystems.emplace_back(drive);
+                subsystems.emplace_back(&system_manager);
+                subsystems.emplace_back(&drive);
             }
 
             void initialize(ArduinoUtility::Config config) override{
-                drive.initialize(config);
+                
+                for(subsystem::Subsystem* subsystem : subsystems){
+                    subsystem->initialize(config);
+                }
             }
 
             std::vector<ArduinoUtility::ArduinoMessage> getMessagesToSend() override{
                 std::vector<ArduinoUtility::ArduinoMessage> commands;
 
-                for(subsystem::Subsystem subsystem : subsystems){
-                    std::vector<ArduinoUtility::ArduinoMessage> currentCommandPacket = subsystem.getMessagesToSend();
+                for(subsystem::Subsystem* subsystem : subsystems){
+                    std::vector<ArduinoUtility::ArduinoMessage> currentCommandPacket = subsystem->getMessagesToSend();
 
                     commands.insert(commands.end(), currentCommandPacket.begin(), currentCommandPacket.end());
                 }
@@ -51,11 +53,11 @@ namespace subsystem{
             std::vector<hardware_interface::StateInterface> getStateInterfaces() override{
                 std::vector<hardware_interface::StateInterface> state_interfaces;
 
-                for(int j = 0; j < subsystems.size(), j++){
-                    std::vector<hardware_interface::StateInterface> currentStateInterface = subsystems.at(j).getStateInterfaces();
+                for(subsystem::Subsystem* subsystem : subsystems){
+                    std::vector<hardware_interface::StateInterface> currentStateInterface = subsystem->getStateInterfaces();
 
-                    for(int i = 0; i < currentStateInterface.size(); i++){
-                        state_interfaces.emplace_back(currentStateInterface.at(i));
+                    for(int j = 0; j < currentStateInterface.size(); j++){
+                        state_interfaces.emplace_back(currentStateInterface.at(j));
                     }
                 }
 
@@ -65,28 +67,31 @@ namespace subsystem{
             std::vector<hardware_interface::CommandInterface> getCommandInterfaces() override{
                 std::vector<hardware_interface::CommandInterface> command_interfaces;
 
-                // for(subsystem::Subsystem subsystem : subsystems){
-                //     std::vector<hardware_interface::CommandInterface> currentCommandInterface = subsystem.getCommandInterfaces();
+                for(subsystem::Subsystem* subsystem : subsystems){
+                    std::vector<hardware_interface::CommandInterface> currentCommandInterface = subsystem->getCommandInterfaces();
                     
-                //     for(int i = 0; i < currentCommandInterface.size(); i++){
-                //         command_interfaces.emplace_back(currentCommandInterface.at(i));
-                //     }
-                // }
+                    for(int i = 0; i < currentCommandInterface.size(); i++){
+                        hardware_interface::CommandInterface& shitter = currentCommandInterface.at(i);
+
+                        command_interfaces.emplace_back(shitter);
+                    }
+                }
 
                 return command_interfaces;
             }
 
             void applyToAll(ArduinoUtility::ArduinoMessage message) override{
-                for(subsystem::Subsystem subsystem : subsystems){
-                    subsystem.applyToAll(message);
+
+                for(subsystem::Subsystem* subsystem : subsystems){
+                    subsystem->applyToAll(message);
                 }
             }
 
             std::vector<ArduinoUtility::ArduinoMessage> configDevices() override{
                 std::vector<ArduinoUtility::ArduinoMessage> messages;
 
-                for(subsystem::Subsystem subsystem : subsystems){
-                    std::vector<ArduinoUtility::ArduinoMessage> currentConfigPacket = subsystem.configDevices();
+                for(subsystem::Subsystem* subsystem : subsystems){
+                    std::vector<ArduinoUtility::ArduinoMessage> currentConfigPacket = subsystem->configDevices();
 
                     messages.insert(messages.end(), currentConfigPacket.begin(), currentConfigPacket.end());
                 }

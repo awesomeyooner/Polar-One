@@ -36,6 +36,8 @@ namespace hardware_component{
                 };
             }
 
+            virtual ArduinoUtility::ArduinoMessage send_message(){return {};}
+
             virtual void apply(ArduinoUtility::ArduinoMessage message){}
 
             std::string device;

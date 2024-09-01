@@ -18,7 +18,7 @@ namespace subsystem{
 
         private:
             
-            std::vector<hardware_component::Device> devices;
+            std::vector<hardware_component::Device*> devices;
 
         public:         
             hardware_component::Motor drive_motor;
@@ -28,8 +28,8 @@ namespace subsystem{
              drive_motor(hardware_interface::HW_IF_VELOCITY), 
              steer_motor(hardware_interface::HW_IF_POSITION){
 
-                devices.emplace_back(drive_motor);
-                devices.emplace_back(steer_motor);
+                devices.emplace_back(&drive_motor);
+                devices.emplace_back(&steer_motor);
             }
 
             void initialize(ArduinoUtility::Config config) override{
@@ -41,8 +41,9 @@ namespace subsystem{
             std::vector<ArduinoUtility::ArduinoMessage> getMessagesToSend() override{
                 std::vector<ArduinoUtility::ArduinoMessage> messages;
 
-                messages.emplace_back(drive_motor.send_message());
-                messages.emplace_back(steer_motor.send_message());
+                for(hardware_component::Device* device : devices){
+                    messages.emplace_back(device->send_message());
+                }
 
                 return messages;
             }
@@ -70,8 +71,8 @@ namespace subsystem{
             }
 
             void applyToAll(ArduinoUtility::ArduinoMessage message) override{
-                for(hardware_component::Device device : devices){
-                    device.apply(message);
+                for(hardware_component::Device* device : devices){
+                    device->apply(message);
                 }
             }
 
