@@ -51,12 +51,12 @@ namespace subsystem{
             std::vector<hardware_interface::StateInterface> getStateInterfaces() override{
                 std::vector<hardware_interface::StateInterface> state_interfaces;
 
-                state_interfaces.emplace_back(drive_motor.getStateInterface(drive_motor.velocity));
-                state_interfaces.emplace_back(drive_motor.getStateInterface(drive_motor.position));
-                state_interfaces.emplace_back(drive_motor.getStateInterface(drive_motor.effort));
+                state_interfaces.emplace_back(drive_motor.getStateInterface(&drive_motor.velocity));
+                state_interfaces.emplace_back(drive_motor.getStateInterface(&drive_motor.position));
+                state_interfaces.emplace_back(drive_motor.getStateInterface(&drive_motor.effort));
 
-                state_interfaces.emplace_back(steer_motor.getStateInterface(steer_motor.position));
-                state_interfaces.emplace_back(steer_motor.getStateInterface(steer_motor.effort));
+                state_interfaces.emplace_back(steer_motor.getStateInterface(&steer_motor.position));
+                state_interfaces.emplace_back(steer_motor.getStateInterface(&steer_motor.effort));
 
                 return state_interfaces;
             }
@@ -64,8 +64,8 @@ namespace subsystem{
             std::vector<hardware_interface::CommandInterface> getCommandInterfaces() override{
                 std::vector<hardware_interface::CommandInterface> command_interfaces;
 
-                command_interfaces.emplace_back(drive_motor.getCommandInterfaces(drive_motor.command));
-                command_interfaces.emplace_back(steer_motor.getCommandInterfaces(steer_motor.command));
+                command_interfaces.emplace_back(drive_motor.getCommandInterfaces(&drive_motor.command));
+                command_interfaces.emplace_back(steer_motor.getCommandInterfaces(&steer_motor.command));
 
                 return command_interfaces;
             }

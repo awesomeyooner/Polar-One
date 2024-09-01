@@ -50,19 +50,19 @@ namespace hardware_component{
                 };
             }
 
-            hardware_interface::StateInterface getStateInterface(hardware_component::InterfaceValue wanted){
+            hardware_interface::StateInterface getStateInterface(hardware_component::InterfaceValue* wanted){
                 return hardware_interface::StateInterface(
                     device,
-                    wanted.interface_type,
-                    &wanted.value
+                    wanted->interface_type,
+                    &wanted->value
                 );
             }
 
-            hardware_interface::CommandInterface getCommandInterfaces(hardware_component::InterfaceValue wanted){
+            hardware_interface::CommandInterface getCommandInterfaces(hardware_component::InterfaceValue* wanted){
                 return hardware_interface::CommandInterface(
                     device,
-                    wanted.interface_type,
-                    &wanted.value
+                    wanted->interface_type,
+                    &wanted->value
                 );
             }
 

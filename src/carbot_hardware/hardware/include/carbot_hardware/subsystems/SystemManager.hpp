@@ -49,8 +49,8 @@ namespace subsystem{
             std::vector<hardware_interface::StateInterface> getStateInterfaces() override{
                 std::vector<hardware_interface::StateInterface> state_interfaces;
 
-                state_interfaces.emplace_back(heartbeat_sensor.getStateInterface(heartbeat_sensor.state));
-                state_interfaces.emplace_back(voltage_sensor.getStateInterface(voltage_sensor.state));
+                state_interfaces.emplace_back(heartbeat_sensor.getStateInterface(&heartbeat_sensor.state));
+                state_interfaces.emplace_back(voltage_sensor.getStateInterface(&voltage_sensor.state));
 
                 return state_interfaces;
             }
