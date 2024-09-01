@@ -49,10 +49,7 @@ namespace carbot_hardware{
       ArduinoUtility::Config config;
 
       subsystem::Superstructure superstructure;
-
-      hardware_component::Sensor voltage_sensor;
-      hardware_component::Sensor heartbeat_monitor;
-
+      
     public:
       RCLCPP_SHARED_PTR_DEFINITIONS(CarlikeBotSystemHardware);
 

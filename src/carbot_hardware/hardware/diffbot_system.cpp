@@ -55,9 +55,7 @@ hardware_interface::CallbackReturn CarlikeBotSystemHardware::on_init(const hardw
 }
 
 std::vector<hardware_interface::StateInterface> CarlikeBotSystemHardware::export_state_interfaces(){
-  std::vector<hardware_interface::StateInterface> state_interfaces = superstructure.getStateInterfaces();
-
-  return state_interfaces;
+  return superstructure.getStateInterfaces();
 }
 
 std::vector<hardware_interface::CommandInterface> CarlikeBotSystemHardware::export_command_interfaces(){
@@ -96,8 +94,6 @@ hardware_interface::return_type CarlikeBotSystemHardware::read(const rclcpp::Tim
 
 hardware_interface::return_type carbot_hardware ::CarlikeBotSystemHardware::write(const rclcpp::Time & /*time*/, const rclcpp::Duration & /*period*/){
   std::vector<ArduinoUtility::ArduinoMessage> messages = superstructure.getMessagesToSend();
-
-  messages.push_back(heartbeat_monitor.send_message());
 
   comms.send_message(messages); 
 
