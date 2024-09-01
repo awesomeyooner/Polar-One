@@ -26,10 +26,12 @@ namespace subsystem{
             virtual std::vector<ArduinoUtility::ArduinoMessage> configDevices(){return {};}
 
             virtual void initialize(ArduinoUtility::Config config){
-                RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "====================== shitter ======================");
+                RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "====================== init ======================");
             }
 
-            virtual void applyToAll(ArduinoUtility::ArduinoMessage message){}
+            virtual void applyToAll(ArduinoUtility::ArduinoMessage message){
+                RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "====================== apply ======================");
+            }
 
     };
 }

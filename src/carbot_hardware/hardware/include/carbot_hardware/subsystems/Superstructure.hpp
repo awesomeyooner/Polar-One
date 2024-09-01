@@ -71,13 +71,13 @@ namespace subsystem{
                     std::vector<hardware_interface::CommandInterface> currentCommandInterface = subsystem->getCommandInterfaces();
                     
                     for(int i = 0; i < currentCommandInterface.size(); i++){
-                        hardware_interface::CommandInterface& shitter = currentCommandInterface.at(i);
+                        //hardware_interface::CommandInterface& shitter = currentCommandInterface.at(i);
 
-                        command_interfaces.emplace_back(shitter);
+                        //command_interfaces.emplace_back(shitter);
                     }
                 }
 
-                return command_interfaces;
+                return  drive.getCommandInterfaces();
             }
 
             void applyToAll(ArduinoUtility::ArduinoMessage message) override{

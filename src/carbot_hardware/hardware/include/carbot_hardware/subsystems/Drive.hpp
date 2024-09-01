@@ -33,7 +33,7 @@ namespace subsystem{
             }
 
             void initialize(ArduinoUtility::Config config) override{
-                RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "====================== finally ======================");
+                RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "=========");
                 drive_motor.device = config.drive_id;
                 steer_motor.device = config.steer_id;
             }
