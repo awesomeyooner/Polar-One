@@ -6,6 +6,7 @@
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include <vector>
 #include "carbot_hardware/diffbot_system.hpp"
+#include "rclcpp/rclcpp.hpp"
 
 namespace subsystem{
 
@@ -24,7 +25,9 @@ namespace subsystem{
 
             virtual std::vector<ArduinoUtility::ArduinoMessage> configDevices(){return {};}
 
-            virtual void initialize(ArduinoUtility::Config config){}
+            virtual void initialize(ArduinoUtility::Config config){
+                RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "====================== shitter ======================");
+            }
 
             virtual void applyToAll(ArduinoUtility::ArduinoMessage message){}
 

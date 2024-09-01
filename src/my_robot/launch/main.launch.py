@@ -99,9 +99,9 @@ def generate_launch_description():
 
         #joystick_launch,
         translator_launch,
-        camera_driver_launch,
-        camera_compressor_launch,
-        detection_model_launch,
+        #camera_driver_launch,
+        #camera_compressor_launch,
+        #detection_model_launch,
 
         #foxglove
 

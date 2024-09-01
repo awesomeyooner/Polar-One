@@ -21,10 +21,11 @@ namespace subsystem{
         private:
             std::vector<subsystem::Subsystem> subsystems;
 
-            subsystem::SystemManager system_manager;
-            subsystem::Drive drive;
+            
             
         public:         
+            subsystem::SystemManager system_manager;
+            subsystem::Drive drive;
   
             Superstructure() : Subsystem(){
                 subsystems.emplace_back(system_manager);
@@ -32,9 +33,7 @@ namespace subsystem{
             }
 
             void initialize(ArduinoUtility::Config config) override{
-                for(subsystem::Subsystem subsystem : subsystems){
-                    subsystem.initialize(config);
-                }
+                drive.initialize(config);
             }
 
             std::vector<ArduinoUtility::ArduinoMessage> getMessagesToSend() override{
@@ -52,8 +51,8 @@ namespace subsystem{
             std::vector<hardware_interface::StateInterface> getStateInterfaces() override{
                 std::vector<hardware_interface::StateInterface> state_interfaces;
 
-                for(subsystem::Subsystem subsystem : subsystems){
-                    std::vector<hardware_interface::StateInterface> currentStateInterface = subsystem.getStateInterfaces();
+                for(int j = 0; j < subsystems.size(), j++){
+                    std::vector<hardware_interface::StateInterface> currentStateInterface = subsystems.at(j).getStateInterfaces();
 
                     for(int i = 0; i < currentStateInterface.size(); i++){
                         state_interfaces.emplace_back(currentStateInterface.at(i));

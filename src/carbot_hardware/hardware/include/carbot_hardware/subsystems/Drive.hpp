@@ -10,19 +10,20 @@
 #include "carbot_hardware/diffbot_system.hpp"
 #include "carbot_hardware/constants.hpp"
 #include "hardware_interface/handle.hpp"
+#include "rclcpp/rclcpp.hpp"
 
 namespace subsystem{
 
     class Drive : public Subsystem{
 
         private:
-            hardware_component::Motor drive_motor;
-            hardware_component::Motor steer_motor;
-
+            
             std::vector<hardware_component::Device> devices;
 
         public:         
-  
+            hardware_component::Motor drive_motor;
+            hardware_component::Motor steer_motor;
+
             Drive() : Subsystem(),
              drive_motor(hardware_interface::HW_IF_VELOCITY), 
              steer_motor(hardware_interface::HW_IF_POSITION){
@@ -32,6 +33,7 @@ namespace subsystem{
             }
 
             void initialize(ArduinoUtility::Config config) override{
+                RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), "====================== finally ======================");
                 drive_motor.device = config.drive_id;
                 steer_motor.device = config.steer_id;
             }

@@ -76,7 +76,8 @@
         "any": "cpp",
         "regex": "cpp",
         "ranges": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "source_location": "cpp"
     },
     "cmake.sourceDirectory": "/home/dev/Documents/GitHub/Polar-One/src/carbot_hardware"
 }
