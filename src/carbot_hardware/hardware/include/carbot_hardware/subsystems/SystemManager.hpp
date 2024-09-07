@@ -51,20 +51,19 @@ namespace subsystem{
                 std::vector<hardware_interface::StateInterface> state_interfaces;
 
                 state_interfaces.emplace_back(heartbeat_sensor.getStateInterface(&heartbeat_sensor.state));
-                state_interfaces.emplace_back(heartbeat_sensor.getStateInterface(&heartbeat_sensor.delta));
                 state_interfaces.emplace_back(voltage_sensor.getStateInterface(&voltage_sensor.state));
 
                 return state_interfaces;
             }
 
             void applyToAll(ArduinoUtility::ArduinoMessage message) override{
-                double first = heartbeat_sensor.state.value;
+                //double first = heartbeat_sensor.state.value;
 
                 for(hardware_component::Device* device : devices){
                     device->apply(message);
                 }
 
-                RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), std::to_string(heartbeat_sensor.state.value - first).c_str());
+                //RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), std::to_string(heartbeat_sensor.state.value - first).c_str());
             }
     };
 }
