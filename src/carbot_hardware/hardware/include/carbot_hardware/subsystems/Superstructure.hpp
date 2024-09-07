@@ -48,7 +48,7 @@ namespace subsystem{
                     commands.insert(commands.end(), currentCommandPacket.begin(), currentCommandPacket.end());
                 }
 
-                //RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), std::to_string(drive.getMessagesToSend().at(0).value).c_str());
+                // RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), std::to_string(drive.getMessagesToSend().at(0).value).c_str());
 
                 return commands;
             }

@@ -17,6 +17,7 @@ namespace hardware_component{
         public:
 
             hardware_component::InterfaceValue state = {MessageType::UNCONFIGURED};
+            hardware_component::InterfaceValue delta = {"delta"};
 
             Sensor(const std::string& state_interface) : Device(), state{state_interface, 0}{}
 
@@ -27,6 +28,9 @@ namespace hardware_component{
                 if(message.message_type == MessageType::STATUS){
                     if(message.type_value == state.interface_type)
                         state.value = message.value;
+                    if(message.type_value == delta.interface_type)
+                        delta.value = message.value;
+                    
                 }
             }
 

@@ -9,6 +9,7 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include "arduino_interface_types.hpp"
+#include "rclcpp/rclcpp.hpp"
 
 using json = nlohmann::json;
 
@@ -140,6 +141,8 @@ class ArduinoComms{
 
       json dump = get_json_dump();
 
+      //RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), dump.dump().c_str());
+
       if(dump == NULL)
         return messages;
 
@@ -188,6 +191,8 @@ class ArduinoComms{
 
         total_packet.push_back(single_packet);
       }
+
+      //RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), total_packet.dump().c_str());
 
       serial_connection.Write(total_packet.dump() + '\n');
     }
