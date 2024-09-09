@@ -48,8 +48,6 @@ namespace subsystem{
                     commands.insert(commands.end(), currentCommandPacket.begin(), currentCommandPacket.end());
                 }
 
-                // RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), std::to_string(drive.getMessagesToSend().at(0).value).c_str());
-
                 return commands;
             }
 
@@ -57,11 +55,11 @@ namespace subsystem{
                 std::vector<hardware_interface::StateInterface> state_interfaces;
 
                 for(subsystem::Subsystem* subsystem : subsystems){
-                    std::vector<hardware_interface::StateInterface> currentStateInterface = subsystem->getStateInterfaces();
 
-                    for(int j = 0; j < currentStateInterface.size(); j++){
-                        state_interfaces.emplace_back(currentStateInterface.at(j));
+                    for(hardware_interface::StateInterface interface : subsystem->getStateInterfaces()){
+                        state_interfaces.emplace_back(interface);
                     }
+
                 }
 
                 return state_interfaces;
@@ -74,9 +72,7 @@ namespace subsystem{
                     std::vector<hardware_interface::CommandInterface> currentCommandInterface = subsystem->getCommandInterfaces();
                     
                     for(int i = 0; i < currentCommandInterface.size(); i++){
-                        //hardware_interface::CommandInterface& shitter = currentCommandInterface.at(i);
-
-                        //command_interfaces.emplace_back(shitter);
+                        //cant emplace back, cant copy command interface
                     }
                 }
 

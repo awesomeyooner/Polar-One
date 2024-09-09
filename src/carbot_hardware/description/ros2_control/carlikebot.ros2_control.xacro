@@ -43,6 +43,7 @@
 
         <sensor name="${prefix}heartbeat">
           <state_interface name="raw"/>
+          <state_interface name="latency"/>
         </sensor>
 
         <sensor name="${prefix}voltage_sensor">

@@ -25,8 +25,8 @@ namespace hardware_component{
 
             Device(){}
             
-            virtual std::vector<hardware_interface::StateInterface> getStateInterfaces(){return {};};
-            virtual std::vector<hardware_interface::CommandInterface> getCommandInterfaces(){return {};}
+            virtual hardware_interface::StateInterface getStateInterface(){return hardware_interface::StateInterface("null");};
+            virtual hardware_interface::CommandInterface getCommandInterface(){return hardware_interface::CommandInterface("null");}
 
             virtual ArduinoUtility::ArduinoMessage send_message(std::string message_type, std::string type_value, double value){
                 return ArduinoUtility::ArduinoMessage{
