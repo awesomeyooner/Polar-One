@@ -3,8 +3,19 @@
 
 #include "carbot_hardware/arduino_comms.hpp"
 #include "carbot_hardware/arduino_interface_types.hpp"
+#include <string>
+#include "rclcpp/rclcpp.hpp"
 
 namespace hardware_component{
+
+    struct InterfaceValue{
+        std::string interface_type;
+        double value;
+
+        InterfaceValue(std::string if_type, double val) : interface_type(if_type), value(val){}
+        InterfaceValue(std::string if_type) : interface_type(if_type), value(0.0){}
+        InterfaceValue() : interface_type(""), value(0.0){}
+    };
 
     class Device{
 
@@ -12,7 +23,10 @@ namespace hardware_component{
 
         public:
 
-            Device() = default;
+            Device(){}
+            
+            virtual std::vector<hardware_interface::StateInterface> getStateInterfaces(){return {};};
+            virtual std::vector<hardware_interface::CommandInterface> getCommandInterfaces(){return {};}
 
             virtual ArduinoUtility::ArduinoMessage send_message(std::string message_type, std::string type_value, double value){
                 return ArduinoUtility::ArduinoMessage{
@@ -23,10 +37,12 @@ namespace hardware_component{
                 };
             }
 
+            virtual ArduinoUtility::ArduinoMessage send_message(){return {};}
+
             virtual void apply(ArduinoUtility::ArduinoMessage message){}
 
             std::string device;
-            double value;
+            
 
 
     };

@@ -10,6 +10,21 @@ namespace ArduinoUtility{
     double value = 0; //whatever value you want to send
   };
 
+  struct Config{
+      std::string port = "";
+
+      std::string drive_id = "";
+      std::string steer_id = "";
+
+      std::string voltage_sensor_id = "";
+
+      std::string heartbeat_id = "";
+
+      int32_t baud_rate = 0;
+      int32_t loop_rate = 0;
+      int32_t timeout_ms = 0;
+  };
+
 }
 
 namespace MessageType{

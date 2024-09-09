@@ -37,41 +37,19 @@
 #include "devices/Motor.hpp"
 #include "devices/Sensor.hpp"
 
-namespace carbot_hardware{
+#include "subsystems/Superstructure.hpp"
 
+namespace carbot_hardware{
+    
   class CarlikeBotSystemHardware : public hardware_interface::SystemInterface{
 
-    struct Config{
-      std::string port = "";
-
-      std::string drive_id = "";
-      std::string steer_id = "";
-
-      std::string voltage_sensor_id = "";
-
-      std::string heartbeat_id = "";
-
-      int32_t baud_rate = 0;
-      int32_t loop_rate = 0;
-      int32_t timeout_ms = 0;
-    };
-
     private:
-    
-      // Store the command for the simulated robot
-      std::vector<double> hw_commands_;
-      std::vector<double> hw_positions_;
-      std::vector<double> hw_velocities_;
-
+  
       ArduinoComms comms;
-      Config config;
+      ArduinoUtility::Config config;
 
-      hardware_component::Motor drive_motor;
-      hardware_component::Motor steer_motor;
-
-      hardware_component::Sensor voltage_sensor;
-      hardware_component::Sensor heartbeat_monitor;
-
+      subsystem::Superstructure superstructure;
+      
     public:
       RCLCPP_SHARED_PTR_DEFINITIONS(CarlikeBotSystemHardware);
 

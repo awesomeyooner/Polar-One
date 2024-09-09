@@ -16,27 +16,42 @@ namespace hardware_component{
 
         public:
 
-            std::string message_type;
-            std::string type_value;
-            double value;
+            hardware_component::InterfaceValue state = {MessageType::UNCONFIGURED};
 
-            Sensor() = default;
+            Sensor(const std::string& state_interface) : Device(), state{state_interface, 0}{}
 
             void apply(ArduinoUtility::ArduinoMessage message){
                 if(message.device != device)
                     return;
 
-                type_value = message.type_value;
-                value = message.value;
+                if(message.message_type == MessageType::STATUS){
+                    if(message.type_value == state.interface_type)
+                        state.value = message.value;                    
+                }
             }
 
-            virtual ArduinoUtility::ArduinoMessage send_message(std::string message_type, std::string type_value, double value){
-                return ArduinoUtility::ArduinoMessage{
-                    .device = device,
-                    .message_type = message_type,
-                    .type_value = type_value,
-                    .value = value
-                };
+            ArduinoUtility::ArduinoMessage send_message(std::string type_value, double value){
+                return Device::send_message(MessageType::STATUS, state.interface_type, state.value);
+            }
+
+            ArduinoUtility::ArduinoMessage send_message(){
+                return send_message(state.interface_type, state.value);
+            }
+
+            hardware_interface::StateInterface getStateInterface(hardware_component::InterfaceValue* wanted){
+                return hardware_interface::StateInterface(
+                    device,
+                    wanted->interface_type,
+                    &wanted->value
+                );
+            }
+
+            hardware_interface::CommandInterface getCommandInterfaces(hardware_component::InterfaceValue* wanted){
+                return hardware_interface::CommandInterface(
+                    device,
+                    wanted->interface_type,
+                    &wanted->value
+                );
             }
             
     };

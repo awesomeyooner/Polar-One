@@ -9,6 +9,7 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include "arduino_interface_types.hpp"
+#include "rclcpp/rclcpp.hpp"
 
 using json = nlohmann::json;
 
@@ -39,18 +40,12 @@ LibSerial::BaudRate convert_baud_rate(int baud_rate)
 class ArduinoComms{
 
   private:
+
     LibSerial::SerialPort serial_connection;
     int timeout_ms;
 
   public:
 
-    // struct ArduinoMessage{
-    //     std::string device = ""; //(id) left, right, voltage_sensor
-    //     std::string message_type = ""; //status, control, config
-    //     std::string type_value = ""; //velocity, position, percent, inverted
-    //     double value = 0; //whatever value you want to send
-    // };
-    
     ArduinoComms() = default;
 
     void connect(const std::string &serial_device, int32_t baud_rate, int32_t timeout_ms)
@@ -146,6 +141,8 @@ class ArduinoComms{
 
       json dump = get_json_dump();
 
+      //RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), dump.dump().c_str());
+
       if(dump == NULL)
         return messages;
 
@@ -194,6 +191,8 @@ class ArduinoComms{
 
         total_packet.push_back(single_packet);
       }
+
+      //RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), total_packet.dump().c_str());
 
       serial_connection.Write(total_packet.dump() + '\n');
     }
