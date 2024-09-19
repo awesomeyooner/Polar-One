@@ -48,6 +48,10 @@ namespace TypeValue{
 
   constexpr char RAW[] = "raw";
 
+  constexpr char LATENCY[] = "latency";
+
+  constexpr char HERTZ[] = "hertz";
+
   constexpr char LOWER_BOUND[] = "lower_bound";
 
   constexpr char NEUTRAL[] = "neutral";

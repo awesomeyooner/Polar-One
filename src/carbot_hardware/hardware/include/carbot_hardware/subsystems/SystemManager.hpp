@@ -10,6 +10,7 @@
 #include "carbot_hardware/diffbot_system.hpp"
 #include "carbot_hardware/constants.hpp"
 #include "hardware_interface/handle.hpp"
+#include "carbot_hardware/devices/HeartbeatMonitor.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 namespace subsystem{
@@ -17,23 +18,21 @@ namespace subsystem{
     class SystemManager : public Subsystem{
 
         private:
-            hardware_component::Sensor heartbeat_sensor;
+            hardware_component::HeartbeatMonitor heartbeat_monitor;
             hardware_component::Sensor voltage_sensor;
 
             std::vector<hardware_component::Device*> devices;
 
         public:         
   
-            SystemManager() : Subsystem(),
-             heartbeat_sensor(TypeValue::RAW), 
-             voltage_sensor(TypeValue::VOLTAGE){
+            SystemManager() : Subsystem(), voltage_sensor(TypeValue::VOLTAGE){
 
-                devices.emplace_back(&heartbeat_sensor);
+                devices.emplace_back(&heartbeat_monitor);
                 devices.emplace_back(&voltage_sensor);
             }
 
             void initialize(ArduinoUtility::Config config) override{
-                heartbeat_sensor.device = config.heartbeat_id;
+                heartbeat_monitor.device = config.heartbeat_id;
                 voltage_sensor.device = config.voltage_sensor_id;
             }
 
@@ -50,20 +49,19 @@ namespace subsystem{
             std::vector<hardware_interface::StateInterface> getStateInterfaces() override{
                 std::vector<hardware_interface::StateInterface> state_interfaces;
 
-                state_interfaces.emplace_back(heartbeat_sensor.getStateInterface(&heartbeat_sensor.state));
+                state_interfaces.emplace_back(heartbeat_monitor.getStateInterface(&heartbeat_monitor.heartbeat));
+                state_interfaces.emplace_back(heartbeat_monitor.getStateInterface(&heartbeat_monitor.latency));
+                state_interfaces.emplace_back(heartbeat_monitor.getStateInterface(&heartbeat_monitor.hertz));
+
                 state_interfaces.emplace_back(voltage_sensor.getStateInterface(&voltage_sensor.state));
 
                 return state_interfaces;
             }
 
             void applyToAll(ArduinoUtility::ArduinoMessage message) override{
-                //double first = heartbeat_sensor.state.value;
-
                 for(hardware_component::Device* device : devices){
                     device->apply(message);
                 }
-
-                //RCLCPP_INFO(rclcpp::get_logger("CarlikeBotSystemHardware"), std::to_string(heartbeat_sensor.state.value - first).c_str());
             }
     };
 }

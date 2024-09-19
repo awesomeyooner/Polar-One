@@ -18,18 +18,18 @@ class Joystick : public rclcpp::Node
   //3 right x
   //4 right y
   //5 right trigger
-    Joystick() : Node("teleop")
+    Joystick() : Node("joystick_teleop")
     {
-        this->declare_parameter<double>("default_max", 0.5);
-        this->declare_parameter<double>("boost_amount", 1);
-        this->declare_parameter<int>("boost_toggle", 6);
-        this->declare_parameter<int>("freeze_toggle", 0);
+        this->declare_parameter<double>("max_speed", 1);
+        this->declare_parameter<double>("reduced_speed", 0.5);
+        this->declare_parameter<int>("toggle_boost", 6);
+        this->declare_parameter<int>("toggle_freeze", 0);
 
         // rclcpp::Parameter
-        default_max = this->get_parameter("default_max").as_double();
-        boost_amount = this->get_parameter("boost_amount").as_double();
-        boost_toggle = this->get_parameter("boost_toggle").as_int();
-        freeze_toggle = this->get_parameter("freeze_toggle").as_int();
+        max_speed = this->get_parameter("max_speed").as_double();
+        reduced_speed = this->get_parameter("reduced_speed").as_double();
+        toggle_boost = this->get_parameter("toggle_boost").as_int();
+        toggle_freeze = this->get_parameter("toggle_freeze").as_int();
 
         publisher = this->create_publisher<geometry_msgs::msg::TwistStamped>("cmd_vel", 10);
         subscription = this->create_subscription<sensor_msgs::msg::Joy>(
@@ -48,12 +48,9 @@ class Joystick : public rclcpp::Node
 
       double boost_coef;
 
-      if(msg.buttons.at(boost_toggle))
-        boost_coef = boost_amount;
-      else
-        boost_coef = default_max;
+      if(!msg.buttons.at(toggle_freeze)){
+        boost_coef = msg.buttons.at(toggle_boost) ? max_speed : reduced_speed;
 
-      if(!msg.buttons.at(freeze_toggle)){
         twist_stamped.twist.linear.x = msg.axes[1] * boost_coef;
         twist_stamped.twist.angular.z = msg.axes[3];
         publisher->publish(twist_stamped);
@@ -63,11 +60,11 @@ class Joystick : public rclcpp::Node
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr subscription;
     rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr publisher;
 
-    double default_max;
-    int boost_toggle;
-    double boost_amount;
-
-    int freeze_toggle;
+    double max_speed;
+    double reduced_speed;
+    
+    int toggle_boost;
+    int toggle_freeze;
 };
 
 int main(int argc, char * argv[])
