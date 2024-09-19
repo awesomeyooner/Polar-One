@@ -51,6 +51,7 @@ namespace subsystem{
 
                 state_interfaces.emplace_back(heartbeat_monitor.getStateInterface(&heartbeat_monitor.heartbeat));
                 state_interfaces.emplace_back(heartbeat_monitor.getStateInterface(&heartbeat_monitor.latency));
+                state_interfaces.emplace_back(heartbeat_monitor.getStateInterface(&heartbeat_monitor.hertz));
 
                 state_interfaces.emplace_back(voltage_sensor.getStateInterface(&voltage_sensor.state));
 

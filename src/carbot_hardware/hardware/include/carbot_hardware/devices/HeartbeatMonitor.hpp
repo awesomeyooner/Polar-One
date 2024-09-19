@@ -11,6 +11,7 @@ namespace hardware_component{
 
             hardware_component::InterfaceValue heartbeat = {TypeValue::RAW};
             hardware_component::InterfaceValue latency = {TypeValue::LATENCY};
+            hardware_component::InterfaceValue hertz = {TypeValue::HERTZ};
 
             HeartbeatMonitor() : Device(){}
 
@@ -21,6 +22,7 @@ namespace hardware_component{
                 if(message.message_type == MessageType::STATUS){
                     if(message.type_value == heartbeat.interface_type){
                         latency.value = message.value - heartbeat.value;
+                        hertz.value = 1 / (latency.value / 1000);
                         heartbeat.value = message.value;
                     }
                 }
