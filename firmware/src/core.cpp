@@ -24,6 +24,8 @@ LED led = LED(GPIOC, GPIO_PIN_1);
 
 void core_init()
 {
+    HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
+
     ActionManager::init();
 
     Action say_hello = Action(0.5);
@@ -43,4 +45,9 @@ void core_init()
 void core_update()
 {
     ActionManager::update();
+
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_11, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_12, GPIO_PIN_RESET);
+    __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, 45);
+
 }
