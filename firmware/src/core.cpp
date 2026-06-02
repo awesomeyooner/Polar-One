@@ -48,9 +48,13 @@ void core_init()
             string data = ByteConverter::bytes_to_string(bytes);
 
             ActionManager::add(Action::run_once(
-                [data] -> void
+                [bytes, data] -> void
                 {
                     Serial.print(data);
+
+                    int data = ByteConverter::bytes_to_int(bytes);
+
+                    motor.set_percent((double)(data) / 100);
                 }
             ));
 
@@ -81,7 +85,7 @@ void core_init()
     say_hello.link_callback(
         [](double timestamp, double time_since_last) -> StatusedValue<bool>
         {
-            led.toggle();
+            // led.toggle();
             // Serial.info("Hello World!");
 
             return StatusedValue<bool>(false, StatusCode::OK);

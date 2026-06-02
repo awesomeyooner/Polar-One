@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 
     while(System::is_alive())
     {
-        auto input = util::get_user_input_string("Say something: ");
+        auto input = util::get_user_input_int("Say something: ");
 
         if(!input.is_OK())
         {
@@ -36,31 +36,21 @@ int main(int argc, char* argv[])
             break;
         }
 
-        std::vector<uint8_t> data = ByteConverter::string_to_bytes(input.value);
+        std::vector<uint8_t> data = ByteConverter::int_to_bytes(input.value);
 
         serial.write_to_register(100, data);
 
-        double start = System::get_time_since_start();
+        // auto status = serial.receive_bytes((int)input.value.length(), 1000);
 
-        while(!serial.get_port().IsDataAvailable())
-        {
-            double time = System::get_time_since_start();
+        // if(!status.is_OK())
+        // {
+        //     Logger::debug("what");
+        //     continue;
+        // }
 
-            if(time - start > 0.5)
-                break;
-        }
+        // std::string read_data = ByteConverter::bytes_to_string(status.value);
 
-        auto status = serial.receive_bytes((int)input.value.length(), 1000);
-
-        if(!status.is_OK())
-        {
-            Logger::debug("what");
-            continue;
-        }
-
-        std::string read_data = ByteConverter::bytes_to_string(status.value);
-
-        std::cout << read_data << std::endl;
+        // std::cout << read_data << std::endl;
     }
 
     Logger::info("Exiting...");
