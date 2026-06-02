@@ -4,7 +4,13 @@
 #include "EmbeddedLib/devices/led.hpp"
 
 #include "WireLib/communication/protocols/serial_interface.hpp"
+#include "WireLib/util/byte_converter.hpp"
+
 #include "ActionLib/ActionManager.hpp"
+
+#include "devices/l298n.hpp"
+
+#include <functional>
 
 #include "adc.h"
 #include "can.h"
@@ -18,21 +24,43 @@
 
 
 using namespace status_utils;
+using namespace std;
 
 
 LED led = LED(GPIOC, GPIO_PIN_1);
 
+L298N motor = L298N(&htim8, TIM_CHANNEL_1, TIM_CHANNEL_2);
+
 void core_init()
 {
-    HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
-
     ActionManager::init();
+
+    Serial.set_parse_type(ParseType::RAW);
+
+    Serial.configure_on_receive(
+        [](const vector<uint8_t>& bytes) -> StatusCode
+        {
+            Action print_data = Action::run_once(
+                [bytes]() -> void
+                {
+                    string text = ByteConverter::bytes_to_string(bytes);
+
+                    Serial.info(text);
+                }
+            );
+
+            ActionManager::add(print_data);
+
+            return StatusCode::OK;
+        }
+    );
 
     Action say_hello = Action(0.5);
 
     say_hello.link_callback(
         [](double timestamp, double time_since_last) -> StatusedValue<bool>
         {
+            led.toggle();
             Serial.info("Hello World!");
 
             return StatusedValue<bool>(false, StatusCode::OK);
@@ -40,14 +68,15 @@ void core_init()
     );
 
     ActionManager::add(say_hello);
+
+    motor.init();
 }
 
 void core_update()
 {
     ActionManager::update();
 
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_11, GPIO_PIN_SET);
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_12, GPIO_PIN_RESET);
-    __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_2, 45);
-
+    motor.set_percent(0.5);
 }
+
+
