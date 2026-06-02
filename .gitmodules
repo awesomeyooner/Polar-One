@@ -7,6 +7,3 @@
 [submodule "firmware/lib/ActionLib"]
 	path = firmware/lib/ActionLib
 	url = https://github.com/awesomeyooner/ActionLib.git
-[submodule "serial_test/project/lib/CommiFaceLib"]
-	path = serial_test/project/lib/CommiFaceLib
-	url = https://github.com/awesomeyooner/CommiFaceLib.git
