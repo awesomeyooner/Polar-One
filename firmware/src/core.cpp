@@ -3,6 +3,7 @@
 #include "EmbeddedLib/System.hpp"
 #include "EmbeddedLib/devices/led.hpp"
 
+#include "WireLib/communication/wire_manager.hpp"
 #include "WireLib/communication/protocols/serial_interface.hpp"
 #include "WireLib/util/byte_converter.hpp"
 
@@ -35,25 +36,45 @@ void core_init()
 {
     ActionManager::init();
 
-    Serial.set_parse_type(ParseType::RAW);
+    Serial.set_parse_type(ParseType::PACKET);
 
-    Serial.configure_on_receive(
-        [](const vector<uint8_t>& bytes) -> StatusCode
+    WireManager::attach(Serial);
+
+    RegisterManager::add_command(
+        100,
+        8,
+        [](const std::vector<uint8_t>& bytes) -> StatusCode
         {
-            Action print_data = Action::run_once(
-                [bytes]() -> void
+            string data = ByteConverter::bytes_to_string(bytes);
+
+            ActionManager::add(Action::run_once(
+                [data] -> void
                 {
-                    string text = ByteConverter::bytes_to_string(bytes);
-
-                    Serial.info(text);
+                    Serial.print(data);
                 }
-            );
-
-            ActionManager::add(print_data);
+            ));
 
             return StatusCode::OK;
         }
     );
+
+    // Serial.configure_on_receive(
+    //     [](const vector<uint8_t>& bytes) -> StatusCode
+    //     {
+    //         Action print_data = Action::run_once(
+    //             [bytes]() -> void
+    //             {
+    //                 string text = ByteConverter::bytes_to_string(bytes);
+
+    //                 Serial.info(text);
+    //             }
+    //         );
+
+    //         ActionManager::add(print_data);
+
+    //         return StatusCode::OK;
+    //     }
+    // );
 
     Action say_hello = Action(0.5);
 
@@ -61,7 +82,7 @@ void core_init()
         [](double timestamp, double time_since_last) -> StatusedValue<bool>
         {
             led.toggle();
-            Serial.info("Hello World!");
+            // Serial.info("Hello World!");
 
             return StatusedValue<bool>(false, StatusCode::OK);
         }
@@ -76,7 +97,7 @@ void core_update()
 {
     ActionManager::update();
 
-    motor.set_percent(0.5);
+    // motor.set_percent(0.5);
 }
 
 
