@@ -57,8 +57,8 @@ void core_init()
                     double data = ByteConverter::bytes_to_double(bytes);
 
                     // servo.set_duty(data);
-                    servo.set_angle(data * (M_2_PI / 360));
-                    // motor.set_percent((double)(data) / 100);
+                    // servo.set_angle(data * (M_2_PI / 360));
+                    motor.set_percent(data);
                 }
             ));
 

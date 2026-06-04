@@ -5,6 +5,9 @@
 
 #include "tim.h"
 
+#include "EmbeddedLib/util/status.hpp"
+#include "devices/timer_device.hpp"
+
 
 class L298N
 {
@@ -13,19 +16,14 @@ class L298N
 
         L298N(TIM_HandleTypeDef* timer, int in1, int in2);
 
-        void init();
+        status_utils::StatusCode init();
 
         void set_percent(double percent);
 
     private:
 
-        TIM_HandleTypeDef* m_timer = nullptr;
-
-        int m_in1;
-        int m_in2;
-
-
-        void set_duty_cycle(int duty, int pin);
+        TimerDevice m_in1;
+        TimerDevice m_in2;
 
 }; // class L298N 
 
