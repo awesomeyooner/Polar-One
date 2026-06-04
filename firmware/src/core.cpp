@@ -56,7 +56,8 @@ void core_init()
 
                     double data = ByteConverter::bytes_to_double(bytes);
 
-                    servo.set_duty(data);
+                    // servo.set_duty(data);
+                    servo.set_angle(data * (M_2_PI / 360));
                     // motor.set_percent((double)(data) / 100);
                 }
             ));
@@ -99,6 +100,10 @@ void core_init()
 
     motor.init();
     servo.init();
+
+    servo.set_ranges(0.035, 0.135, (M_2_PI / 360) * 270);
+    servo.set_lower_limit((M_2_PI / 360) * 120);
+    servo.set_upper_limit((M_2_PI / 360) * 150);
 }
 
 void core_update()
