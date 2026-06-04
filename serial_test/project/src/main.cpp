@@ -15,6 +15,9 @@
 #include <libserial/SerialPort.h>
 
 
+using namespace status_utils;
+
+
 const std::string DEVICE_PRODUCT = "STM32 Virtual ComPort";
 
 
@@ -24,11 +27,16 @@ int main(int argc, char* argv[])
 
     SerialInterface serial;
 
-    serial.init_field("product", DEVICE_PRODUCT);
+    if(serial.init_field("product", DEVICE_PRODUCT) != StatusCode::OK)
+    {
+        Logger::error("Exiting...");
+        return 1;
+    }
+
 
     while(System::is_alive())
     {
-        auto input = util::get_user_input_int("Say something: ");
+        auto input = util::get_user_input_double("Say something: ");
 
         if(!input.is_OK())
         {
@@ -36,7 +44,7 @@ int main(int argc, char* argv[])
             break;
         }
 
-        std::vector<uint8_t> data = ByteConverter::int_to_bytes(input.value);
+        std::vector<uint8_t> data = ByteConverter::double_to_bytes(input.value);
 
         serial.write_to_register(100, data);
 
@@ -53,9 +61,10 @@ int main(int argc, char* argv[])
         // std::cout << read_data << std::endl;
     }
 
-    Logger::info("Exiting...");
-
+    Logger::info("Closing Serial Port...");
     serial.close();
+
+    Logger::info("Exiting...");
 
     return 0;
 }
