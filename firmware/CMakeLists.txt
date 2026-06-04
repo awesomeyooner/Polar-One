@@ -45,6 +45,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     src/core.cpp
 
     src/devices/l298n.cpp
+    src/devices/servo.cpp
 )
 
 # Add include paths

@@ -10,6 +10,7 @@
 #include "ActionLib/ActionManager.hpp"
 
 #include "devices/l298n.hpp"
+#include "devices/servo.hpp"
 
 #include <functional>
 
@@ -31,6 +32,7 @@ using namespace std;
 LED led = LED(GPIOC, GPIO_PIN_1);
 
 L298N motor = L298N(&htim8, TIM_CHANNEL_1, TIM_CHANNEL_2);
+Servo servo = Servo(&htim3, TIM_CHANNEL_3);
 
 void core_init()
 {
@@ -50,11 +52,13 @@ void core_init()
             ActionManager::add(Action::run_once(
                 [bytes, data] -> void
                 {
-                    Serial.print(data);
+                    // Serial.print(data);
 
-                    int data = ByteConverter::bytes_to_int(bytes);
+                    double data = ByteConverter::bytes_to_double(bytes);
 
-                    motor.set_percent((double)(data) / 100);
+                    // __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, data);
+                    servo.set_duty_cycle(data);
+                    // motor.set_percent((double)(data) / 100);
                 }
             ));
 
@@ -85,7 +89,7 @@ void core_init()
     say_hello.link_callback(
         [](double timestamp, double time_since_last) -> StatusedValue<bool>
         {
-            // led.toggle();
+            led.toggle();
             // Serial.info("Hello World!");
 
             return StatusedValue<bool>(false, StatusCode::OK);
@@ -95,6 +99,7 @@ void core_init()
     ActionManager::add(say_hello);
 
     motor.init();
+    servo.init();
 }
 
 void core_update()
