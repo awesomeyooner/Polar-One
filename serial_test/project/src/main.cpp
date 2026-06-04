@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 
     while(System::is_alive())
     {
-        auto input = util::get_user_input_double("Say something: ");
+        auto input = util::get_user_input_double("[ INT ] >> ");
 
         if(!input.is_OK())
         {
