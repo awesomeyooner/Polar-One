@@ -56,8 +56,7 @@ void core_init()
 
                     double data = ByteConverter::bytes_to_double(bytes);
 
-                    // __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_3, data);
-                    servo.set_duty_cycle(data);
+                    servo.set_duty(data);
                     // motor.set_percent((double)(data) / 100);
                 }
             ));

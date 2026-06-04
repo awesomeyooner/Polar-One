@@ -30,6 +30,9 @@ StatusCode TimerDevice::init()
 
 void TimerDevice::set_duty(double duty)
 {
+    if(m_channel == -1 || m_timer == nullptr)
+        return;
+
     // Clamp from [0, 1]
     if(duty > 1)
         duty = 1;
