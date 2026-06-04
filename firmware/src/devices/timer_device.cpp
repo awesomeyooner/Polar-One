@@ -106,6 +106,19 @@ double TimerDevice::get_PWM_freq()
 } // end of "get_PWM_freq"
 
 
+double TimerDevice::get_duty()
+{
+    if(m_timer == nullptr || m_channel == -1)
+        return -1;
+
+    int CCR = __HAL_TIM_GET_COMPARE(m_timer, m_channel);
+    int ARR = m_timer->Init.Period;
+
+    return (double)(CCR) / (ARR + 1);
+
+} // end of "get_duty()"
+
+
 bool TimerDevice::is_advanced_timer()
 {
     TIM_TypeDef* instance = m_timer->Instance;
