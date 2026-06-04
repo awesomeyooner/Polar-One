@@ -85,6 +85,13 @@ class TimerDevice
          */
         double get_PWM_freq();
 
+        /**
+         * @brief Gets the duty cycle currently applied from `[0, 1]`
+         * 
+         * @return `double` Duty cycle from `[0, 1]`
+         */
+        double get_duty();
+
     protected:
 
         // Underlying timer handle
