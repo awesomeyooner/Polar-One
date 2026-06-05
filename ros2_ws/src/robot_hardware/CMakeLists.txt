@@ -32,7 +32,7 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
   $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
-  /opt/ros/jazzy/include/rclcpp
+  /opt/ros/jazzy/include
 )
 
 # Export hardware plugins
