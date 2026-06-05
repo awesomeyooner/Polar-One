@@ -69,7 +69,7 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("carbot_hardware"), "urdf", description_file]
+                [FindPackageShare("robot_hardware"), "urdf", description_file]
             ),
             " ",
             "prefix:=",
@@ -79,7 +79,7 @@ def generate_launch_description():
     robot_description = {"robot_description": robot_description_content}
 
     rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare(description_package), "description/rviz", "default.rviz"]
+        [FindPackageShare(description_package), "description/rviz", "rviz.rviz"]
     )
 
     joint_state_publisher_node = Node(
@@ -87,7 +87,7 @@ def generate_launch_description():
         executable="joint_state_publisher_gui",
         condition=IfCondition(gui),
     )
-    
+
     robot_state_publisher_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",

@@ -59,13 +59,13 @@ install(
 
 # Description (urdf, xml, etc)
 install(
-  DIRECTORY description/rviz description/ros2_control description/urdf description
+  DIRECTORY description/rviz description/ros2_control description/urdf
   DESTINATION share/${PROJECT_NAME}
 )
 
 # Bringup (yaml configs, launch files)
 install(
-  DIRECTORY bringup/launch bringup/config bringup
+  DIRECTORY bringup/launch bringup/config
   DESTINATION share/${PROJECT_NAME}
 )
 
