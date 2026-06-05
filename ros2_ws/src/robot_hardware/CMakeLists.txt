@@ -51,20 +51,25 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-# INSTALL
+# Source code
 install(
   DIRECTORY hardware/include/
   DESTINATION include/${PROJECT_NAME}
 )
-# install(
-#   DIRECTORY description/launch description/ros2_control description/urdf
-#   DESTINATION share/carbot_hardware
-# )
-# install(
-#   DIRECTORY bringup/launch bringup/config bringup
-#   DESTINATION share/carbot_hardware
-# )
 
+# Description (urdf, xml, etc)
+install(
+  DIRECTORY description/rviz description/ros2_control description/urdf description
+  DESTINATION share/${PROJECT_NAME}
+)
+
+# Bringup (yaml configs, launch files)
+install(
+  DIRECTORY bringup/launch bringup/config bringup
+  DESTINATION share/${PROJECT_NAME}
+)
+
+# Whole project
 install(TARGETS ${PROJECT_NAME}
   EXPORT export_${PROJECT_NAME}
   ARCHIVE DESTINATION lib
