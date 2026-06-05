@@ -44,21 +44,17 @@ int main(int argc, char* argv[])
             break;
         }
 
-        std::vector<uint8_t> data = ByteConverter::double_to_bytes(input.value);
+        serial.write_double(100, input.value);
 
-        serial.write_to_register(100, data);
+        auto status = serial.request_double(99);
 
-        // auto status = serial.receive_bytes((int)input.value.length(), 1000);
+        if(!status.is_OK())
+        {
+            Logger::debug("Failed to receive data.");
+            continue;
+        }
 
-        // if(!status.is_OK())
-        // {
-        //     Logger::debug("what");
-        //     continue;
-        // }
-
-        // std::string read_data = ByteConverter::bytes_to_string(status.value);
-
-        // std::cout << read_data << std::endl;
+        Logger::info(status.value);
     }
 
     Logger::info("Closing Serial Port...");

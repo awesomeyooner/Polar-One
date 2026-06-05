@@ -42,6 +42,19 @@ void core_init()
 
     WireManager::attach(Serial);
 
+    RegisterManager::add_request(
+        99,
+        8,
+        [](std::vector<uint8_t>& write_buffer) -> StatusCode
+        {
+            auto bytes = ByteConverter::double_to_bytes(System::get_seconds());
+
+            Serial.transmit_bytes(bytes);
+
+            return StatusCode::OK;
+        }
+    );
+
     RegisterManager::add_command(
         100,
         8,
@@ -57,8 +70,8 @@ void core_init()
                     double data = ByteConverter::bytes_to_double(bytes);
 
                     // servo.set_duty(data);
-                    // servo.set_angle(data * (M_2_PI / 360));
-                    motor.set_percent(data);
+                    servo.set_angle(data * (M_2_PI / 360));
+                    // motor.set_percent(data);
                 }
             ));
 
