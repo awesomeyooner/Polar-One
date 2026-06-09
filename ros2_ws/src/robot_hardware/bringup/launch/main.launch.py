@@ -50,7 +50,7 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("carbot_hardware"), "urdf", "carlikebot.urdf.xacro"]
+                [FindPackageShare("robot_hardware"), "urdf", "core.urdf.xacro"]
             ),
         ]
     )
@@ -58,16 +58,16 @@ def generate_launch_description():
 
     robot_controllers = PathJoinSubstitution(
         [
-            FindPackageShare("carbot_hardware"),
+            FindPackageShare("robot_hardware"),
             "config",
-            "carlikebot_controllers.yaml",
+            "robot_hardware_controllers.yaml",
         ]
     )
     rviz_config_file = PathJoinSubstitution(
         [
-            FindPackageShare("carbot_hardware"),
-            "carlikebot/rviz",
-            "carlikebot.rviz",
+            FindPackageShare("robot_hardware_hardware"),
+            "rviz",
+            "default.rviz",
         ]
     )
 
@@ -79,7 +79,6 @@ def generate_launch_description():
         output="both",
         remappings=[
             ("~/robot_description", "/robot_description"),
-            ("/effort_controllers/tf_odometry", "/tf"),
         ],
         condition=IfCondition(remap_odometry_tf),
     )
@@ -121,7 +120,7 @@ def generate_launch_description():
             # "effort_controllers",
             # "-c", "/controller_manager",
             # "-t", "effort_controllers/JointGroupEffortController", 
-            "effort_controller",
+            # "effort_controller",
             "--controller-manager", 
             "/controller_manager"
             ],

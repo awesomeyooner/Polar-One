@@ -5,6 +5,9 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+# In order to compile external libs
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 add_subdirectory(hardware/lib/CommiFaceLib)
 
 # Dependency list

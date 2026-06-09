@@ -1,6 +1,6 @@
 <library path="robot_hardware">
-  <class name="robot_hardware/CarlikeBotSystemHardware"
-         type="robot_hardware::CarlikeBotSystemHardware"
+  <class name="robot_hardware/RobotSystemHardware"
+         type="robot_hardware::RobotSystemHardware"
          base_class_type="hardware_interface::SystemInterface">
     <description>
       Polar-One Hardware Interface

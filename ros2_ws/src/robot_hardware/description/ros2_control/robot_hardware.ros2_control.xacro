@@ -4,6 +4,39 @@
 <xacro:macro name="robot_hardware_ros2_control" params="name prefix">
 
     <xacro:property name="speed_multiplier" value="1"/>
+    
+    <xacro:macro name="front_wheel" params="name">
+
+        <joint name="${name}_wheel_joint">
+            <command_interface name="velocity"/>
+
+            <!-- RC car doesn't have feedback -->
+            <!-- <state_interface name="velocity"/> -->
+            <!-- <state_interface name="position"/> -->
+            <!-- <state_interface name="effort"/> -->
+        </joint>
+
+        <joint name="${name}_steer_joint">
+            <command_interface name="position"/>
+
+            <!-- <state_interface name="position"/> -->
+            <!-- <state_interface name="effort"/> -->
+        </joint>
+
+    </xacro:macro>
+
+    <xacro:macro name="rear_wheel" params="name">
+
+        <joint name="${name}_wheel_joint">
+            <command_interface name="velocity"/>
+
+            <!-- RC car doesn't have feedback -->
+            <!-- <state_interface name="velocity"/> -->
+            <!-- <state_interface name="position"/> -->
+            <!-- <state_interface name="effort"/> -->
+        </joint>
+
+    </xacro:macro>
 
     <!-- If NOT Sim Mode (Real Mode) -->
     <xacro:unless value="$(arg sim_mode)">
@@ -16,26 +49,16 @@
                 <!-- For initializing the serial port -->
                 <param name="MCU_field">product</param>
                 <param name="MCU_description">STM32 Virtual ComPort</param>
-                
+
                 <!-- <param name="my_int_param">0</param> -->
                 <!-- <param name="my_string_param">Hello World</param> -->
             </hardware>
 
-            <joint name="${prefix}drive_motor">
-                <command_interface name="velocity"/>
+            <xacro:front_wheel name="${prefix}front_left"/>
+            <xacro:front_wheel name="${prefix}front_right"/>
 
-                <!-- RC car doesn't have feedback -->
-                <!-- <state_interface name="velocity"/> -->
-                <!-- <state_interface name="position"/> -->
-                <state_interface name="effort"/>
-            </joint>
-
-            <joint name="${prefix}steering_servo">
-                <command_interface name="position"/>
-
-                <state_interface name="position"/>
-                <!-- <state_interface name="effort"/> -->
-            </joint>
+            <xacro:rear_wheel name="${prefix}rear_left"/>
+            <xacro:rear_wheel name="${prefix}rear_right"/>
 
         </ros2_control>
 

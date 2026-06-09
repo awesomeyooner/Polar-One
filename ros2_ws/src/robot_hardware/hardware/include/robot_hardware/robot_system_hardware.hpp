@@ -19,14 +19,15 @@
 
 #include "robot_hardware/visibility_control.h"
 
+#include "CommiFaceLib/protocols/serial.hpp"
+
 
 namespace robot_hardware{
     
 
-class RobotSystemHardware : public hardware_interface::SystemInterface{
+class RobotSystemHardware : public hardware_interface::SystemInterface
+{
 
-    private:
-    
     public:
 
         RCLCPP_SHARED_PTR_DEFINITIONS(RobotSystemHardware)
@@ -51,6 +52,13 @@ class RobotSystemHardware : public hardware_interface::SystemInterface{
 
         ROBOT_HARDWARE_PUBLIC
         hardware_interface::return_type write(const rclcpp::Time& time, const rclcpp::Duration& period) override;
+
+    private:
+
+        SerialInterface serial_port;
+
+        double drive_commands[4] = {0};
+        double steer_commands[2] = {0};
 
 }; // class RobotSystemHardware
 
