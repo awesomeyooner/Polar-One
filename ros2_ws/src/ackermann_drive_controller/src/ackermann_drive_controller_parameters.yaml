@@ -20,3 +20,8 @@ ackermann_drive_controller:
       not_empty<>: []
     }
   }
+  command_timeout: {
+    type: double,
+    default_value: 1.0,
+    description: "How old a command can be until the controller halts the drivetrain",
+  }

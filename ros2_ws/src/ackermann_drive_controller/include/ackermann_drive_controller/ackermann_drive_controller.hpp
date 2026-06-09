@@ -76,6 +76,14 @@ namespace ackermann_drive_controller
         // The struct that holds the yaml config
         Params params;
 
+        // The last twist command send to this controller
+        std::shared_ptr<geometry_msgs::msg::TwistStamped> last_command = nullptr;
+
+        rclcpp::Subscription<geometry_msgs::msg::TwistStamped>::SharedPtr command_subscriber = nullptr;
+
+        std::vector<std::reference_wrapper<hardware_interface::LoanedCommandInterface>> drive_interfaces;
+        std::vector<std::reference_wrapper<hardware_interface::LoanedCommandInterface>> steer_interfaces;
+
     };
 } // namespace ackermann_drive_controller
 
