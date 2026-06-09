@@ -5,6 +5,8 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+add_subdirectory(hardware/lib/CommiFaceLib)
+
 # Dependency list
 set(THIS_PACKAGE_INCLUDE_DEPENDS
   ament_cmake
@@ -23,8 +25,12 @@ add_library( ${PROJECT_NAME} SHARED
   hardware/src/robot_system_hardware.cpp
 )
 
-ament_target_dependencies(robot_hardware PUBLIC
+ament_target_dependencies(${PROJECT_NAME} PUBLIC
   ${THIS_PACKAGE_INCLUDE_DEPENDS}
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    CommiFaceLib
 )
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
@@ -32,6 +38,8 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/include>
   $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/hardware/lib>
+  $<INSTALL_INTERFACE:lib/${PROJECT_NAME}>
   /opt/ros/jazzy/include
 )
 
