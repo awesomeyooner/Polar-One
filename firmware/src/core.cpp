@@ -79,6 +79,30 @@ void core_init()
         }
     );
 
+    RegisterManager::add_command(
+        101,
+        8,
+        [](const std::vector<uint8_t>& bytes) -> StatusCode
+        {
+            string data = ByteConverter::bytes_to_string(bytes);
+
+            ActionManager::add(Action::run_once(
+                [bytes, data] -> void
+                {
+                    // Serial.print(data);
+
+                    double data = ByteConverter::bytes_to_double(bytes);
+
+                    // servo.set_duty(data);
+                    // servo.set_angle(data * (M_2_PI / 360));
+                    motor.set_percent(data);
+                }
+            ));
+
+            return StatusCode::OK;
+        }
+    );
+
     // Serial.configure_on_receive(
     //     [](const vector<uint8_t>& bytes) -> StatusCode
     //     {
