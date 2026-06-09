@@ -1,0 +1,22 @@
+ackermann_drive_controller:
+  command_topic: {
+    type: string,
+    default_value: "~/cmd_vel",
+    description: "Which topic to subscribe to for the twist message"
+  }
+  steer_joint_names: {
+    type: string_array,
+    default_value: [],
+    description: "Names of the steering joints (revolute)",
+    validation: {
+      not_empty<>: []
+    }
+  }
+  drive_joint_names: {
+    type: string_array,
+    default_value: [],
+    description: "Names of the drive joints (continous)",
+    validation: {
+      not_empty<>: []
+    }
+  }
