@@ -13,3 +13,6 @@
 [submodule "ros2_ws/src/robot_hardware/hardware/lib/CommiFaceLib"]
 	path = ros2_ws/src/robot_hardware/hardware/lib/CommiFaceLib
 	url = https://github.com/awesomeyooner/CommiFaceLib.git
+[submodule "ros2_ws/src/joystick_driver"]
+	path = ros2_ws/src/joystick_driver
+	url = https://github.com/awesomeyooner/joystick_driver.git

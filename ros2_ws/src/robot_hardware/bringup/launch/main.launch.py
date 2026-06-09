@@ -1,16 +1,11 @@
-# Copyright 2020 ros2_control Development Team
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+import os
+
+from ament_index_python.packages import get_package_share_directory
+
+from launch import LaunchDescription
+from launch.substitutions import LaunchConfiguration, Command
+from launch.actions import DeclareLaunchArgument
+from launch_ros.actions import Node
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, RegisterEventHandler
@@ -21,6 +16,7 @@ from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
+import xacro
 
 def generate_launch_description():
     # Declare arguments
@@ -65,7 +61,7 @@ def generate_launch_description():
     )
     rviz_config_file = PathJoinSubstitution(
         [
-            FindPackageShare("robot_hardware_hardware"),
+            FindPackageShare("robot_hardware"),
             "rviz",
             "default.rviz",
         ]
@@ -143,13 +139,27 @@ def generate_launch_description():
         )
     )
 
+    joy_params = os.path.join(get_package_share_directory('joystick_driver'),'config','joystick.yaml')
+
     nodes = [
         control_node,
         control_node_remapped,
         robot_state_pub_bicycle_node,
         joint_state_broadcaster_spawner,
-        delay_rviz_after_joint_state_broadcaster_spawner,
+        # delay_rviz_after_joint_state_broadcaster_spawner,
         delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
+        Node(
+            package='joy',
+            executable='joy_node',
+            name='joy_node',
+            parameters=[joy_params]
+            ),
+        Node(
+            package='joystick_driver',
+            executable='joystick_teleop',
+            name='joystick_teleop',
+            parameters=[joy_params]
+            )
     ]
 
     return LaunchDescription(declared_arguments + nodes)

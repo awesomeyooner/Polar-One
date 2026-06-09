@@ -57,8 +57,8 @@ class RobotSystemHardware : public hardware_interface::SystemInterface
 
         SerialInterface serial_port;
 
-        double drive_commands[4] = {0};
-        double steer_commands[2] = {0};
+        double drive_commands[4] = {0, 0, 0, 0};
+        double steer_commands[2] = {0, 0};
 
 }; // class RobotSystemHardware
 

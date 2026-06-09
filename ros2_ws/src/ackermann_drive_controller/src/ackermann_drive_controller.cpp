@@ -69,16 +69,16 @@ return_type AckermannDriveController::update(const rclcpp::Time& time, const rcl
 {
     if(last_command == nullptr)
     {
-        return return_type::ERROR;
+        return return_type::OK;
     }
 
     double time_since_last_command = abs(
             ((double)last_command->header.stamp.sec + ((double)last_command->header.stamp.nanosec / pow(10, 9))) - time.seconds());
 
-    if(time_since_last_command > params.command_timeout)
-    {
-        return return_type::ERROR;
-    }
+    // if(time_since_last_command > params.command_timeout)
+    // {
+    //     return return_type::OK;
+    // }
 
     double forward_command = last_command.get()->twist.linear.x;
     double angular_command = last_command.get()->twist.angular.z;
@@ -168,6 +168,14 @@ CallbackReturn AckermannDriveController::on_shutdown(const rclcpp_lifecycle::Sta
 } // end of "on_shutdown(const rclcpp_lifecycle::State&)"
 
 
-#include "class_loader/register_macro.hpp"
+#include "pluginlib/class_list_macros.hpp"
 
-CLASS_LOADER_REGISTER_CLASS(AckermannDriveController, ControllerInterface)
+PLUGINLIB_EXPORT_CLASS(
+    ackermann_drive_controller::AckermannDriveController,
+    controller_interface::ControllerInterface
+)
+
+
+// #include "class_loader/register_macro.hpp"
+
+// CLASS_LOADER_REGISTER_CLASS(AckermannDriveController, ControllerInterface)

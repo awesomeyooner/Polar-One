@@ -60,7 +60,7 @@ vector<CommandInterface> RobotSystemHardware::export_command_interfaces()
     command_interfaces.emplace_back(CommandInterface("rear_left_wheel_joint", HW_IF_VELOCITY, &drive_commands[2]));
     command_interfaces.emplace_back(CommandInterface("rear_right_wheel_joint", HW_IF_VELOCITY, &drive_commands[3]));
 
-    command_interfaces.emplace_back(CommandInterface("front_left_steer_joint", HW_IF_POSITION, &drive_commands[0]));
+    command_interfaces.emplace_back(CommandInterface("front_left_steer_joint", HW_IF_POSITION, &steer_commands[0]));
     command_interfaces.emplace_back(CommandInterface("front_right_steer_joint", HW_IF_POSITION, &steer_commands[1]));
 
     return command_interfaces;
@@ -124,8 +124,12 @@ return_type RobotSystemHardware::write(const rclcpp::Time & /*time*/, const rclc
 
     avg_steer /= 2;
 
-    StatusCode drive_status = serial_port.write_double(99, avg_drive);
-    StatusCode steer_status = serial_port.write_double(100, avg_steer);
+    avg_steer += 1;
+    avg_steer /= 2;
+    avg_steer *= 30;
+
+    StatusCode drive_status = serial_port.write_double(101, avg_drive);
+    StatusCode steer_status = serial_port.write_double(100, avg_steer + 120);
 
     StatusCode total_status = combine_statuses({drive_status, steer_status});
 
