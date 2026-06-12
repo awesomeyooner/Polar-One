@@ -11,11 +11,13 @@
 #include "CommiFaceLib/protocols/serial.hpp"
 
 #include "plib/util/util.hpp"
+#include "plib/math/units.hpp"
 
 #include <libserial/SerialPort.h>
 
 
 using namespace status_utils;
+using namespace units;
 
 
 const std::string DEVICE_PRODUCT = "STM32 Virtual ComPort";
@@ -44,20 +46,27 @@ int main(int argc, char* argv[])
             break;
         }
 
-        serial.write_double(101, input.value);
+        StatusCode status = serial.write_double(103, input.value, true);
 
-        auto status = serial.request_double(99);
+        if(status == StatusCode::OK)
+            Logger::info("Success!");
+        else
+            Logger::info("Failed!");
+        // serial.write_double(101, input.value);
 
-        if(!status.is_OK())
-        {
-            Logger::debug("Failed to receive data.");
-            continue;
-        }
+        // auto status = serial.request_double(99);
 
-        Logger::info(status.value);
+        // if(!status.is_OK())
+        // {
+        //     Logger::debug("Failed to receive data.");
+        //     continue;
+        // }
+
+        // Logger::info(status.value);
     }
 
     Logger::info("Closing Serial Port...");
+    
     serial.close();
 
     Logger::info("Exiting...");
