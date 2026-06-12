@@ -139,7 +139,10 @@ def generate_launch_description():
         )
     )
 
-    joy_params = os.path.join(get_package_share_directory('joystick_driver'),'config','joystick.yaml')
+    joystick_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory(hardware_package), "bringup", "launch", 
+        "joystick.launch.py"))
+    )
 
     nodes = [
         control_node,
@@ -148,18 +151,7 @@ def generate_launch_description():
         joint_state_broadcaster_spawner,
         # delay_rviz_after_joint_state_broadcaster_spawner,
         delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
-        Node(
-            package='joy',
-            executable='joy_node',
-            name='joy_node',
-            parameters=[joy_params]
-            ),
-        Node(
-            package='joystick_driver',
-            executable='joystick_teleop',
-            name='joystick_teleop',
-            parameters=[joy_params]
-            )
+        joystick_launch
     ]
 
     return LaunchDescription(declared_arguments + nodes)
