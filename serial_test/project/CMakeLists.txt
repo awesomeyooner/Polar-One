@@ -22,7 +22,9 @@ foreach(Dependency IN ITEMS ${THIS_PACKAGE_INCLUDE_DEPENDS})
 endforeach()
 
 # Create the main executable
-add_executable( ${MAIN_EXEC} src/main.cpp )
+add_executable( ${MAIN_EXEC} 
+    src/main.cpp
+)
 
 target_include_directories(${MAIN_EXEC}
     PUBLIC
