@@ -50,6 +50,13 @@
                 <param name="MCU_field">product</param>
                 <param name="MCU_description">STM32 Virtual ComPort</param>
 
+                <!-- Servo Bounds (in degrees) -->
+                <param name="Servo_Lower_Bound_Degrees">120</param>
+                <param name="Servo_Upper_Bound_Degrees">150</param>
+
+                <!-- Servo Center Position (in degrees) -->
+                <param name="Servo_Center_Degrees">130</param>
+
                 <!-- <param name="my_int_param">0</param> -->
                 <!-- <param name="my_string_param">Hello World</param> -->
             </hardware>
