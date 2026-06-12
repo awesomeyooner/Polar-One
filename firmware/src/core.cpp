@@ -2,6 +2,7 @@
 
 #include "EmbeddedLib/System.hpp"
 #include "EmbeddedLib/devices/led.hpp"
+#include "EmbeddedLib/util/math/math_util.hpp"
 
 #include "WireLib/communication/wire_manager.hpp"
 #include "WireLib/communication/protocols/serial_interface.hpp"
@@ -26,6 +27,7 @@
 
 
 using namespace status_utils;
+using namespace math;
 using namespace std;
 
 
@@ -60,20 +62,8 @@ void core_init()
         8,
         [](const std::vector<uint8_t>& bytes) -> StatusCode
         {
-            string data = ByteConverter::bytes_to_string(bytes);
-
-            ActionManager::add(Action::run_once(
-                [bytes, data] -> void
-                {
-                    // Serial.print(data);
-
-                    double data = ByteConverter::bytes_to_double(bytes);
-
-                    // servo.set_duty(data);
-                    servo.set_angle(data * (M_2_PI / 360));
-                    // motor.set_percent(data);
-                }
-            ));
+            double data = ByteConverter::bytes_to_double(bytes);
+            servo.set_angle(data);
 
             return StatusCode::OK;
         }
@@ -84,18 +74,27 @@ void core_init()
         8,
         [](const std::vector<uint8_t>& bytes) -> StatusCode
         {
-            string data = ByteConverter::bytes_to_string(bytes);
+            
+            double data = ByteConverter::bytes_to_double(bytes);
+            motor.set_percent(data);
 
+            return StatusCode::OK;
+        }
+    );
+
+    RegisterManager::add_command(
+        102,
+        8,
+        [](const std::vector<uint8_t>& bytes) -> StatusCode
+        {
             ActionManager::add(Action::run_once(
-                [bytes, data] -> void
+                [bytes] -> void
                 {
-                    // Serial.print(data);
-
                     double data = ByteConverter::bytes_to_double(bytes);
-
-                    // servo.set_duty(data);
-                    // servo.set_angle(data * (M_2_PI / 360));
-                    motor.set_percent(data);
+                    servo.set_lower_limit(data);
+                    
+                    // Send Acknowledge Bytes
+                    Serial.transmit_bytes(bytes);
                 }
             ));
 
@@ -103,23 +102,25 @@ void core_init()
         }
     );
 
-    // Serial.configure_on_receive(
-    //     [](const vector<uint8_t>& bytes) -> StatusCode
-    //     {
-    //         Action print_data = Action::run_once(
-    //             [bytes]() -> void
-    //             {
-    //                 string text = ByteConverter::bytes_to_string(bytes);
+    RegisterManager::add_command(
+        103,
+        8,
+        [](const std::vector<uint8_t>& bytes) -> StatusCode
+        {
+            ActionManager::add(Action::run_once(
+                [bytes] -> void
+                {
+                    double data = ByteConverter::bytes_to_double(bytes);
+                    servo.set_upper_limit(data);
+                    
+                    // Send Acknowledge Bytes
+                    Serial.transmit_bytes(bytes);
+                }
+            ));
 
-    //                 Serial.info(text);
-    //             }
-    //         );
-
-    //         ActionManager::add(print_data);
-
-    //         return StatusCode::OK;
-    //     }
-    // );
+            return StatusCode::OK;
+        }
+    );
 
     Action say_hello = Action(0.5);
 
@@ -138,16 +139,14 @@ void core_init()
     motor.init();
     servo.init();
 
-    servo.set_ranges(0.035, 0.135, (M_2_PI / 360) * 270);
-    servo.set_lower_limit((M_2_PI / 360) * 120);
-    servo.set_upper_limit((M_2_PI / 360) * 150);
+    servo.set_ranges(0.035, 0.135, degrees_to_radians(270));
+    servo.set_lower_limit(degrees_to_radians(120));
+    servo.set_upper_limit(degrees_to_radians(150));
 }
 
 void core_update()
 {
     ActionManager::update();
-
-    // motor.set_percent(0.5);
 }
 
 
