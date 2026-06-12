@@ -29,13 +29,13 @@ void L298N::set_percent(double percent)
 
     if(percent > 0)
     {
-        m_in1.set_duty(percent);
+        m_in1.set_duty(fabs(percent));
         m_in2.set_duty(0);
     }
     else if(percent < 0)
     {
         m_in1.set_duty(0);
-        m_in2.set_duty(percent);
+        m_in2.set_duty(fabs(percent));
     }
     else // percent == 0
     {

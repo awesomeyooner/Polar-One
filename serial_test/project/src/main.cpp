@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
             break;
         }
 
-        serial.write_double(100, input.value);
+        serial.write_double(101, input.value);
 
         auto status = serial.request_double(99);
 
