@@ -30,7 +30,7 @@ StatusCode HardwareManager::set_servo(double radians)
     return m_serial_port.write_double(
         REG_SERVO_POSITION,
         radians,
-        true // Acknowledge
+        false // Dont Acknowledge
     );
 
 } // end of "set_servo(double)"
@@ -68,7 +68,7 @@ StatusCode HardwareManager::set_motor(double percent)
     return m_serial_port.write_double(
         REG_MOTOR_PERCENT,
         percent,
-        true // Acknowledge
+        false // Dont Acknowledge
     );
 
 } // end of "set_motor(double)"
