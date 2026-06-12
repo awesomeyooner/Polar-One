@@ -26,6 +26,8 @@ endforeach()
 
 add_library( ${PROJECT_NAME} SHARED
   hardware/src/robot_system_hardware.cpp
+
+  hardware/src/hardware_manager.cpp
 )
 
 ament_target_dependencies(${PROJECT_NAME} PUBLIC

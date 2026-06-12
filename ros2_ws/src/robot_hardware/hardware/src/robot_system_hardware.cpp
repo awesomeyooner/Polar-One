@@ -15,6 +15,7 @@
 using namespace robot_hardware;
 using namespace hardware_interface;
 using namespace status_utils;
+using namespace units;
 using namespace std;
 
 
@@ -24,15 +25,16 @@ CallbackReturn RobotSystemHardware::on_init(const HardwareComponentInterfacePara
     if (SystemInterface::on_init(params) != CallbackReturn::SUCCESS)
         return CallbackReturn::ERROR;
 
+    // 1. Initialize the serial port
 
-    // Initialize the serial port with the given field and description
-    // i.e. the "product" field should be "STM32 Virtual ComPort"
-    string field_name = info_.hardware_parameters["MCU_field"];
-    string description = info_.hardware_parameters["MCU_description"];
+        // Initialize the serial port with the given field and description
+        // i.e. the "product" field should be "STM32 Virtual ComPort"
+        string field_name = info_.hardware_parameters["MCU_field"];
+        string description = info_.hardware_parameters["MCU_description"];
 
-    StatusCode init_status = serial_port.init_field(field_name, description);
+        StatusCode serial_init_status = m_hardware.init(field_name, description);
 
-    if(init_status != StatusCode::OK)
+    if(serial_init_status != StatusCode::OK)
         return CallbackReturn::ERROR;
 
     return CallbackReturn::SUCCESS;
@@ -74,6 +76,21 @@ CallbackReturn RobotSystemHardware::on_activate(const rclcpp_lifecycle::State & 
     
     // Nothing to do for now
     
+    // 2. Configure the Servo Bounds
+
+        // Configure the Lower and Upper bounds of the servo
+        double lower_bound_radians = to_radians( std::stod(info_.hardware_parameters["Servo_Lower_Bound_Degrees"]) );
+        double upper_bound_radians = to_radians( std::stod(info_.hardware_parameters["Servo_Upper_Bound_Degrees"]) );
+
+        StatusCode servo_bounds_status = m_hardware.set_servo_bounds(lower_bound_radians, upper_bound_radians);
+
+        double center_radians = to_radians( std::stod(info_.hardware_parameters["Servo_Center_Degrees"]) );
+
+        m_hardware.set_servo_center(center_radians);
+
+    if(servo_bounds_status != StatusCode::OK)
+        return CallbackReturn::ERROR;
+
     RCLCPP_INFO(rclcpp::get_logger("RobotSystemHardware"), "Successfully activated!");
 
     return CallbackReturn::SUCCESS;
@@ -85,7 +102,7 @@ CallbackReturn RobotSystemHardware::on_deactivate(const rclcpp_lifecycle::State 
 {
     RCLCPP_INFO(rclcpp::get_logger("RobotSystemHardware"), "Deactivating ...please wait...");
 
-    // Nothing to do for now
+    m_hardware.close();
 
     RCLCPP_INFO(rclcpp::get_logger("RobotSystemHardware"), "Successfully deactivated!");
 
@@ -124,16 +141,12 @@ return_type RobotSystemHardware::write(const rclcpp::Time & /*time*/, const rclc
 
     avg_steer /= 2;
 
-    avg_steer += 1;
-    avg_steer /= 2;
-    avg_steer *= 30;
+    StatusCode drive_status = m_hardware.set_motor(avg_drive);
+    StatusCode steer_status = m_hardware.set_servo_percent_from_center(avg_steer);
 
-    StatusCode drive_status = serial_port.write_double(101, avg_drive);
-    StatusCode steer_status = serial_port.write_double(100, avg_steer + 120);
+    StatusCode overall_status = combine_statuses({drive_status, steer_status});
 
-    StatusCode total_status = combine_statuses({drive_status, steer_status});
-
-    if(total_status != StatusCode::OK)
+    if(overall_status != StatusCode::OK)
         return return_type::ERROR;
 
     return return_type::OK;

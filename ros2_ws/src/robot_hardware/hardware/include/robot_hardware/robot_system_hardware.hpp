@@ -10,6 +10,7 @@
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
+
 #include "rclcpp/clock.hpp"
 #include "rclcpp/duration.hpp"
 #include "rclcpp/macros.hpp"
@@ -19,7 +20,10 @@
 
 #include "robot_hardware/visibility_control.h"
 
+#include "robot_hardware/hardware_manager.hpp"
+
 #include "CommiFaceLib/protocols/serial.hpp"
+#include "plib/math/units.hpp"
 
 
 namespace robot_hardware{
@@ -55,7 +59,7 @@ class RobotSystemHardware : public hardware_interface::SystemInterface
 
     private:
 
-        SerialInterface serial_port;
+        HardwareManager m_hardware;
 
         double drive_commands[4] = {0, 0, 0, 0};
         double steer_commands[2] = {0, 0};
