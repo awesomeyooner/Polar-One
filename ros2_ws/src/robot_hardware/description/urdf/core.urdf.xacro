@@ -16,21 +16,8 @@
 
   <!-- Import Hardware Interface -->
   <xacro:include filename="$(find robot_hardware)/ros2_control/robot_hardware.ros2_control.xacro" />
-  
-  <!-- <xacro:include filename="$(find robot_hardware)/ros2_control/sim.xacro"/> -->
-
-  <!-- Import Camera -->
-  <!-- <xacro:include filename="$(find robot_hardware)/urdf/components/camera.xacro" /> -->
-
-  <!-- Import Depth Camera -->
-  <!-- <xacro:include filename="$(find robot_hardware)/urdf/components/depth_camera.xacro" /> -->
-
-  <!-- Import LiDAR -->
-  <!-- <xacro:include filename="$(find robot_hardware)/urdf/components/lidar.xacro" /> -->
 
   <xacro:robot_hardware prefix="$(arg prefix)" />
-  <!-- <xacro:camera prefix="$(arg prefix)"/> -->
-  <!-- <xacro:lidar prefix="$(arg prefix)"/> -->
 
   <xacro:robot_hardware_ros2_control name="RobotSystemHardware" prefix="$(arg prefix)" />
 

@@ -4,7 +4,7 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.substitutions import LaunchConfiguration, Command
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch_ros.actions import Node
 
 from launch import LaunchDescription
@@ -12,29 +12,27 @@ from launch.actions import DeclareLaunchArgument, RegisterEventHandler
 from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessExit
 from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 import xacro
 
-
 def generate_launch_description():
 
-    # Check if we're told to use sim time
-    controller_params_file = os.path.join(get_package_share_directory("robot_hardware"),'config','robot_hardware_controllers.yaml')
-
-    controller_manager = Node(
+    external_controllers_spawner = Node(
         package="controller_manager",
-        executable="ros2_control_node",
-        output="both",
-        remappings=[
-            ("~/robot_description", "/robot_description"),
-        ],
-        parameters=[controller_params_file]
+        executable="spawner",
+        arguments=[
+            "ackermann_drive_controller",
+            "--controller-manager", 
+            "/controller_manager"
+            ],
     )
+   
+    nodes = [
+        external_controllers_spawner
+    ]
 
-    # Launch!
-    return LaunchDescription([
-        controller_manager
-    ])
+    return LaunchDescription(nodes)

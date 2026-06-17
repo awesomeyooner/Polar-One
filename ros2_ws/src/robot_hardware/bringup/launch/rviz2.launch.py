@@ -25,6 +25,7 @@ def generate_launch_description():
     
     # Declare arguments
     declared_arguments = []
+    
     declared_arguments.append(
         DeclareLaunchArgument(
             "description_package",
