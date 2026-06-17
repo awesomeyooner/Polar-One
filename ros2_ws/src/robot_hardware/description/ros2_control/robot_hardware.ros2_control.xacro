@@ -51,8 +51,8 @@
                 <param name="MCU_description">STM32 Virtual ComPort</param>
 
                 <!-- Servo Bounds (in degrees) -->
-                <param name="Servo_Lower_Bound_Degrees">120</param>
-                <param name="Servo_Upper_Bound_Degrees">150</param>
+                <param name="Servo_Lower_Bound_Degrees">100</param>
+                <param name="Servo_Upper_Bound_Degrees">170</param>
 
                 <!-- Servo Center Position (in degrees) -->
                 <param name="Servo_Center_Degrees">130</param>

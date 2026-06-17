@@ -79,12 +79,15 @@ CallbackReturn RobotSystemHardware::on_activate(const rclcpp_lifecycle::State & 
     // 2. Configure the Servo Bounds
 
         // Configure the Lower and Upper bounds of the servo
-        double lower_bound_radians = to_radians( std::stod(info_.hardware_parameters["Servo_Lower_Bound_Degrees"]) );
-        double upper_bound_radians = to_radians( std::stod(info_.hardware_parameters["Servo_Upper_Bound_Degrees"]) );
+        double lower_bound_radians = to_radians( 100 /*std::stod(info_.hardware_parameters["Servo_Lower_Bound_Degrees"])*/ );
+        double upper_bound_radians = to_radians( 170 /*std::stod(info_.hardware_parameters["Servo_Upper_Bound_Degrees"])*/ );
 
         StatusCode servo_bounds_status = m_hardware.set_servo_bounds(lower_bound_radians, upper_bound_radians);
 
-        double center_radians = to_radians( std::stod(info_.hardware_parameters["Servo_Center_Degrees"]) );
+        double center_radians = to_radians( 130 /*std::stod(info_.hardware_parameters["Servo_Center_Degrees"])*/ );
+
+        RCLCPP_INFO(rclcpp::get_logger("RobotSystemHardware"), "==============================================");
+        RCLCPP_INFO(rclcpp::get_logger("RobotSystemHardware"), std::to_string(to_degrees(lower_bound_radians)).c_str());
 
         m_hardware.set_servo_center(center_radians);
 
