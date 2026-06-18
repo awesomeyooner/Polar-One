@@ -28,6 +28,6 @@
             <!-- Remember to switch X and Y for onshape to ros -->
             <xacro:property name="wheel_x" value="0.09"/>
             <xacro:property name="wheel_y" value="0.0675"/>
-            <xacro:property name="wheel_z" value="0.02"/>
+            <xacro:property name="wheel_z" value="-0.02"/>
 
 </robot>
