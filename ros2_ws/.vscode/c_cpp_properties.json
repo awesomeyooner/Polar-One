@@ -7,7 +7,8 @@
                 "/opt/ros/jazzy/include/**",
                 "/opt/ros/jazzy/include/hardware_interface",
                 "/opt/ros/jazzy/include/joint_limits",
-                "/usr/include/opencv4"
+                "/usr/include/opencv4",
+                "${workspaceFolder}/build/camera_driver/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
