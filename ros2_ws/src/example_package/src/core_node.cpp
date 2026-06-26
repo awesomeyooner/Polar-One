@@ -23,6 +23,9 @@ void CoreNode::init()
     // You can use params with
     // m_params.my_bool
 
+    m_param_listener = std::make_shared<ParamListener>(this);
+    m_params = m_param_listener->get_params();
+
     m_publisher = this->create_publisher<StringMsg>(
         "my_topic_name", 
         SystemDefaultsQoS()
