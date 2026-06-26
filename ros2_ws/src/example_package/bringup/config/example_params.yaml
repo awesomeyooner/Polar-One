@@ -1,0 +1,9 @@
+example_package:
+  ros__parameters:
+
+    my_string: "Hello World"
+    my_double: 0.0
+    my_int: 0
+    my_bool: false
+    my_int_array: [0, 0]
+    my_double_array: [0.0, 0.0]

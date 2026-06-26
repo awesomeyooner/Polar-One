@@ -1,0 +1,21 @@
+[submodule "firmware/lib/EmbeddedLib"]
+	path = firmware/lib/EmbeddedLib
+	url = https://github.com/awesomeyooner/EmbeddedLib.git
+[submodule "firmware/lib/WireLib"]
+	path = firmware/lib/WireLib
+	url = https://github.com/awesomeyooner/WireLib.git
+[submodule "firmware/lib/ActionLib"]
+	path = firmware/lib/ActionLib
+	url = https://github.com/awesomeyooner/ActionLib.git
+[submodule "serial_test/project/lib/CommiFaceLib"]
+	path = serial_test/project/lib/CommiFaceLib
+	url = https://github.com/awesomeyooner/CommiFaceLib.git
+[submodule "ros2_ws/src/robot_hardware/hardware/lib/CommiFaceLib"]
+	path = ros2_ws/src/robot_hardware/hardware/lib/CommiFaceLib
+	url = https://github.com/awesomeyooner/CommiFaceLib.git
+[submodule "ros2_ws/src/joystick_driver"]
+	path = ros2_ws/src/joystick_driver
+	url = https://github.com/awesomeyooner/joystick_driver.git
+[submodule "ros2_ws/src/camera_driver"]
+	path = ros2_ws/src/camera_driver
+	url = https://github.com/awesomeyooner/camera_driver.git

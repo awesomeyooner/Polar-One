@@ -1,0 +1,37 @@
+example_package:
+
+  my_string: {
+    type: string,
+    default_value: "Hello World!",
+    description: "Example String Param"
+  }
+
+  my_double: {
+    type: double,
+    default_value: 0.0,
+    description: "Example Double Param"
+  }
+
+  my_int: {
+    type: int,
+    default_value: 0,
+    description: "Example Int Param"
+  }
+
+  my_bool: {
+    type: bool,
+    default_value: false,
+    description: "Example Bool Param"
+  }
+
+  my_int_array: {
+    type: int_array,
+    default_value: [0, 0],
+    description: "Example Int Array Param"
+  }
+
+  my_double_array: {
+    type: double_array,
+    default_value: [0.1, 0.1],
+    description: "Example Double Array Param"
+  }

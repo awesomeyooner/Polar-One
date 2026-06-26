@@ -1,11 +1,11 @@
 #ignore build folder
-build/
+/**/build/
 
 #ignore install folder
-install/
+/**/install/
 
 #ignore log folder
-log/
+/**/log/
 
 **/__pycache__/
 
