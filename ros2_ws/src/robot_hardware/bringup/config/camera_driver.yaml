@@ -12,7 +12,7 @@ camera_driver:
     publish_camera_info: false
 
     flip_horizontally: false
-    flip_vertically: false
+    flip_vertically: true
 
     resolution: [640, 480]
     image_fps: 60
