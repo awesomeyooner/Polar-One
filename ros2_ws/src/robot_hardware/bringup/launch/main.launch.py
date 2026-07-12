@@ -41,11 +41,17 @@ def generate_launch_description():
         "external_controllers.launch.py"))
     )
 
+    camera_driver = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(get_package_share_directory("robot_hardware"), "launch", 
+        "camera_driver.launch.py"))
+    )
+
     nodes = [
         controller_manager,
         robot_state_publisher,
         joint_state_broadcaster,
-        external_controllers
+        external_controllers,
+        camera_driver
     ]
 
     return LaunchDescription(nodes)
