@@ -11,7 +11,7 @@ camera_driver:
     publish_compressed: true
     publish_camera_info: false
 
-    flip_horizontally: false
+    flip_horizontally: true
     flip_vertically: true
 
     resolution: [640, 480]
