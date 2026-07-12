@@ -43,7 +43,7 @@ def generate_launch_description():
 
     camera_driver = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(get_package_share_directory("robot_hardware"), "launch", 
-        "camera_driver.launch.py"))
+        "camera.launch.py"))
     )
 
     nodes = [
