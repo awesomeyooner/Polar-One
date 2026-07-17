@@ -138,7 +138,10 @@ void core_init()
     say_hello.link_callback(
         [](double timestamp, double time_since_last) -> StatusedValue<bool>
         {
-            led.toggle();
+            if(System::is_OK())
+                led.toggle();
+            else
+                led.on();
             // Serial.info("Hello World!");
 
             return StatusedValue<bool>(false, StatusCode::OK);
@@ -159,6 +162,13 @@ void core_update()
 {
     System::update();
     ActionManager::update();
-}
+
+    if(!System::is_OK())
+    {
+        motor.stop();
+        servo.stop();
+    }
+
+} // end of "core_update()"
 
 
