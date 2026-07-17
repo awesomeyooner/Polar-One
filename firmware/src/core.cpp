@@ -1,6 +1,6 @@
 #include "core.hpp"
 
-#include "EmbeddedLib/System.hpp"
+#include "EmbeddedLib/system.hpp"
 #include "EmbeddedLib/devices/led.hpp"
 #include "EmbeddedLib/util/math/math_util.hpp"
 
