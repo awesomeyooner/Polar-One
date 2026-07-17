@@ -13,7 +13,7 @@
 #include "devices/l298n.hpp"
 #include "devices/servo.hpp"
 
-#include <functional>
+#include "hardware_manager.hpp"
 
 #include "adc.h"
 #include "can.h"
@@ -24,6 +24,7 @@
 #include "gpio.h"
 
 #include <stdio.h>
+#include <functional>
 
 
 using namespace status_utils;
@@ -33,9 +34,6 @@ using namespace std;
 
 LED led = LED(GPIOC, GPIO_PIN_1);
 
-L298N motor = L298N(&htim8, TIM_CHANNEL_1, TIM_CHANNEL_2);
-Servo servo = Servo(&htim3, TIM_CHANNEL_3);
-
 void core_init()
 {
     ActionManager::init();
@@ -44,130 +42,32 @@ void core_init()
 
     WireManager::attach(Serial);
 
-    RegisterManager::add_request(
-        99,
-        8,
-        [](std::vector<uint8_t>& write_buffer) -> StatusCode
-        {
-            auto bytes = ByteConverter::double_to_bytes(System::get_seconds());
+    HardwareManager::init();
+    HardwareManager::add_registers();
 
-            Serial.transmit_bytes(bytes);
+    Action blink_led = Action(0.5);
 
-            return StatusCode::OK;
-        }
-    );
-
-    RegisterManager::add_command(
-        100,
-        8,
-        [](const std::vector<uint8_t>& bytes) -> StatusCode
-        {
-            double data = ByteConverter::bytes_to_double(bytes);
-
-            System::feed();
-
-            if(System::is_OK())
-                servo.set_angle(data);
-            else
-                servo.stop();
-
-            return StatusCode::OK;
-        }
-    );
-
-    RegisterManager::add_command(
-        101,
-        8,
-        [](const std::vector<uint8_t>& bytes) -> StatusCode
-        {
-            double data = ByteConverter::bytes_to_double(bytes);
-
-            System::feed();
-
-            if(System::is_OK())
-                motor.set_percent(data);
-            else
-                motor.stop();
-
-            return StatusCode::OK;
-        }
-    );
-
-    RegisterManager::add_command(
-        102,
-        8,
-        [](const std::vector<uint8_t>& bytes) -> StatusCode
-        {
-            ActionManager::add(Action::run_once(
-                [bytes] -> void
-                {
-                    double data = ByteConverter::bytes_to_double(bytes);
-                    servo.set_lower_limit(data);
-                    
-                    // Send Acknowledge Bytes
-                    Serial.transmit_bytes(bytes);
-                }
-            ));
-
-            return StatusCode::OK;
-        }
-    );
-
-    RegisterManager::add_command(
-        103,
-        8,
-        [](const std::vector<uint8_t>& bytes) -> StatusCode
-        {
-            ActionManager::add(Action::run_once(
-                [bytes] -> void
-                {
-                    double data = ByteConverter::bytes_to_double(bytes);
-                    servo.set_upper_limit(data);
-                    
-                    // Send Acknowledge Bytes
-                    Serial.transmit_bytes(bytes);
-                }
-            ));
-
-            return StatusCode::OK;
-        }
-    );
-
-    Action say_hello = Action(0.5);
-
-    say_hello.link_callback(
+    blink_led.link_callback(
         [](double timestamp, double time_since_last) -> StatusedValue<bool>
         {
             if(System::is_OK())
                 led.toggle();
             else
                 led.on();
-            // Serial.info("Hello World!");
 
             return StatusedValue<bool>(false, StatusCode::OK);
         }
     );
 
-    ActionManager::add(say_hello);
+    ActionManager::add(blink_led);
 
-    motor.init();
-    servo.init();
-
-    servo.set_ranges(0.035, 0.135, degrees_to_radians(270));
-    servo.set_lower_limit(degrees_to_radians(120));
-    servo.set_upper_limit(degrees_to_radians(150));
-}
+} // end of "core_init()"
 
 void core_update()
 {
     System::update();
     ActionManager::update();
-
-    if(!System::is_OK())
-    {
-        motor.stop();
-        servo.stop();
-    }
+    HardwareManager::update();
 
 } // end of "core_update()"
 
