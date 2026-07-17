@@ -63,7 +63,13 @@ void core_init()
         [](const std::vector<uint8_t>& bytes) -> StatusCode
         {
             double data = ByteConverter::bytes_to_double(bytes);
-            servo.set_angle(data);
+
+            System::feed();
+
+            if(System::is_OK())
+                servo.set_angle(data);
+            else
+                servo.stop();
 
             return StatusCode::OK;
         }
@@ -74,9 +80,14 @@ void core_init()
         8,
         [](const std::vector<uint8_t>& bytes) -> StatusCode
         {
-            
             double data = ByteConverter::bytes_to_double(bytes);
-            motor.set_percent(data);
+
+            System::feed();
+
+            if(System::is_OK())
+                motor.set_percent(data);
+            else
+                motor.stop();
 
             return StatusCode::OK;
         }
@@ -146,6 +157,7 @@ void core_init()
 
 void core_update()
 {
+    System::update();
     ActionManager::update();
 }
 
