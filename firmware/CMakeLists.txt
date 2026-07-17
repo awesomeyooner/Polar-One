@@ -48,6 +48,8 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     src/devices/gpio_device.cpp
     src/devices/l298n.cpp
     src/devices/servo.cpp
+
+    src/hardware_manager.cpp
 )
 
 # Add include paths
