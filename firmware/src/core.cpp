@@ -34,6 +34,7 @@ using namespace std;
 
 LED led = LED(GPIOC, GPIO_PIN_1);
 
+
 void core_init()
 {
     ActionManager::init();
@@ -62,6 +63,7 @@ void core_init()
     ActionManager::add(blink_led);
 
 } // end of "core_init()"
+
 
 void core_update()
 {
