@@ -2,7 +2,7 @@
 
 #include "EmbeddedLib/system.hpp"
 #include "EmbeddedLib/devices/led.hpp"
-#include "EmbeddedLib/util/math/math_util.hpp"
+#include "EmbeddedLib/math/math_util.hpp"
 
 #include "WireLib/communication/wire_manager.hpp"
 #include "WireLib/communication/protocols/serial_interface.hpp"

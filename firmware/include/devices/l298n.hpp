@@ -5,7 +5,7 @@
 
 #include "tim.h"
 
-#include "EmbeddedLib/util/status.hpp"
+#include "EmbeddedLib/status.hpp"
 #include "devices/timer_device.hpp"
 
 
