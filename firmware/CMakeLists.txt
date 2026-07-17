@@ -43,9 +43,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     src/core.cpp
-
-    src/devices/timer_device.cpp
-    src/devices/gpio_device.cpp
+    
     src/devices/l298n.cpp
     src/devices/servo.cpp
 
