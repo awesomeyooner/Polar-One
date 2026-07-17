@@ -53,6 +53,12 @@ class Servo : public TimerDevice
          */
         double get_angle();
 
+        /**
+         * @brief Stops the servo (sets the duty cycle to 0)
+         * 
+         */
+        void stop();
+
     private:
 
         // The min duty cycle that represents the lower bound of the servo

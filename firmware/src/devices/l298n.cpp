@@ -44,3 +44,10 @@ void L298N::set_percent(double percent)
     }
 
 } // end of "set_percent(double)"
+
+
+void L298N::stop()
+{
+    set_percent(0);
+
+} // end of "stop()"
