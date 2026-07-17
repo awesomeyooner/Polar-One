@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-#include "devices/timer_device.hpp"
+#include "EmbeddedLib/devices/timer_device.hpp"
 
 
 class Servo : public TimerDevice

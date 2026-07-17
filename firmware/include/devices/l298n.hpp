@@ -6,7 +6,7 @@
 #include "tim.h"
 
 #include "EmbeddedLib/status.hpp"
-#include "devices/timer_device.hpp"
+#include "EmbeddedLib/devices/timer_device.hpp"
 
 
 class L298N
