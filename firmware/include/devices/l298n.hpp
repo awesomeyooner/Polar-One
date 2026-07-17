@@ -42,6 +42,13 @@ class L298N
         void set_percent(double percent);
 
         /**
+         * @brief Gets the percent output command sent to the motor, from `[-1, 1]
+         * 
+         * @return `double`
+         */
+        double get_percent();
+
+        /**
          * @brief Stops the motor (sets percent to 0)
          * 
          */
@@ -54,6 +61,9 @@ class L298N
 
         // IN2 Channel
         TimerDevice m_in2;
+
+        // Bookkeeping for the percent output applied [-1, 1]
+        double m_percent = 0;
 
 }; // class L298N 
 
