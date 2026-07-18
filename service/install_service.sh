@@ -15,7 +15,7 @@ SERVICE_NAME="polarone"
 echo "Copying file into ${SYSTEMD_DIR}..."
 
 # Copy the service file into the systemd folder
-cp ${SCRIPT_DIR}/${SERVICE_NAME}.service ${SYSTEMD_DIR}/${SERVICE_NAME}.service
+sudo cp ${SCRIPT_DIR}/${SERVICE_NAME}.service ${SYSTEMD_DIR}/${SERVICE_NAME}.service
 
 echo "Reloading daemon..."
 
