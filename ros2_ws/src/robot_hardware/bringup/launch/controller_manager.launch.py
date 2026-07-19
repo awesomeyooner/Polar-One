@@ -8,10 +8,11 @@ from launch.actions import DeclareLaunchArgument
 from launch_ros.actions import Node
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument, RegisterEventHandler, EmitEvent
 from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessExit
 from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
+from launch.events import Shutdown
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -34,7 +35,17 @@ def generate_launch_description():
         parameters=[controller_params_file]
     )
 
+    lifecycle_tracker = RegisterEventHandler(
+        OnProcessExit(
+            target_action=controller_manager,
+            on_exit=[
+                EmitEvent(event=Shutdown(reason="controller_manager exited"))
+            ],
+        )
+    )
+
     # Launch!
     return LaunchDescription([
-        controller_manager
+        controller_manager,
+        lifecycle_tracker
     ])

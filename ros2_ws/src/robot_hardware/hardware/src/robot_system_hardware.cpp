@@ -35,7 +35,25 @@ CallbackReturn RobotSystemHardware::on_init(const HardwareComponentInterfacePara
         StatusCode serial_init_status = m_hardware.init(field_name, description);
 
     if(serial_init_status != StatusCode::OK)
-        return CallbackReturn::ERROR;
+    {
+        bool shutdown_on_error = true;
+
+        try
+        {
+            shutdown_on_error = stoi(info_.hardware_parameters["Shutdown_on_Error"]);
+        }
+        catch(const exception& e)
+        {
+            // Do Nothing
+        }
+
+        // If flag is set, then shutdown on error
+        if(shutdown_on_error)
+            rclcpp::shutdown();
+        // If not, then just return ERROR
+        // else
+            return CallbackReturn::ERROR;
+    }
 
     return CallbackReturn::SUCCESS;
 

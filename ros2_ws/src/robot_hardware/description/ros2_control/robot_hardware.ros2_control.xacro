@@ -57,6 +57,9 @@
                 <!-- Servo Center Position (in degrees) -->
                 <param name="Servo_Center_Degrees">135</param>
 
+                <!-- Throw Runtime Exception when Init Fails -->
+                <param name="Shutdown_on_Error">1</param>
+
                 <!-- <param name="my_int_param">0</param> -->
                 <!-- <param name="my_string_param">Hello World</param> -->
             </hardware>

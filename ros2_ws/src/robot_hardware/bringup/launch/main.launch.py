@@ -8,7 +8,7 @@ from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch_ros.actions import Node
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument, RegisterEventHandler, Shutdown
 from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessExit
 from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
@@ -45,7 +45,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(os.path.join(get_package_share_directory("robot_hardware"), "launch", 
         "camera.launch.py"))
     )
-
+    
     nodes = [
         controller_manager,
         robot_state_publisher,
