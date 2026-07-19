@@ -1,12 +1,14 @@
 [Unit]
 Description=Main Executable for running Polar One
-After=multi-user.target
+BindsTo=dev-tinythinker.device
+After=multi-user.target dev-tinythinker.device
 
 [Service]
 User=aaron
 WorkingDirectory=/home/aaron/Documents/Docker-Workspaces/PolarOne-Workspace
 ExecStart=/home/aaron/Documents/Docker-Workspaces/PolarOne-Workspace/run.sh
 Restart=always
+Type=idle
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=multi-user.target dev-tinythinker.device
