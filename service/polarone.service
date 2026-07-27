@@ -8,6 +8,7 @@ StartLimitBurst=5
 [Service]
 User=aaron
 WorkingDirectory=/home/aaron/Documents/Docker-Workspaces/PolarOne-Workspace
+ExecStartPre=/bin/sleep 10
 ExecStart=/home/aaron/Documents/Docker-Workspaces/PolarOne-Workspace/run.sh
 Restart=always
 RestartSec=5s
