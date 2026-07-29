@@ -12,7 +12,7 @@ fi
 source /opt/ros/jazzy/setup.bash
 
 # Source project
-source /home/ubuntu/Documents/Polar-One/ros2_ws/install/setup.bash
+source /home/ubuntu/ros2_ws/install/setup.bash
 
 # Run your command as executable to takeover terminal
 # Make this the last line

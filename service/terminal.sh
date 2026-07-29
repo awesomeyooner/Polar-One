@@ -14,7 +14,7 @@ docker run \
     --hostname container \
     --name ${CONTAINER_NAME} \
     --user $(id -u):$(id -g) \
-    --volume "$(dirname "$(realpath "$0")")/Documents":/home/ubuntu/Documents \
+    --volume "$(dirname "$(realpath "$0")")/../ros2_ws":/home/ubuntu/ros2_ws \
     --net=host \
     -e TERM=xterm-256color \
     --volume "$(dirname "$(realpath "$0")")/entrypoint.sh":"/tmp/entrypoint.sh" \
