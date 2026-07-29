@@ -7,9 +7,6 @@
 [submodule "firmware/lib/ActionLib"]
 	path = firmware/lib/ActionLib
 	url = https://github.com/awesomeyooner/ActionLib.git
-[submodule "serial_test/project/lib/CommiFaceLib"]
-	path = serial_test/project/lib/CommiFaceLib
-	url = https://github.com/awesomeyooner/CommiFaceLib.git
 [submodule "ros2_ws/src/robot_hardware/hardware/lib/CommiFaceLib"]
 	path = ros2_ws/src/robot_hardware/hardware/lib/CommiFaceLib
 	url = https://github.com/awesomeyooner/CommiFaceLib.git

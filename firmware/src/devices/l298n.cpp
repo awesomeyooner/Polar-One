@@ -27,6 +27,9 @@ void L298N::set_percent(double percent)
     else if(percent < -1)
         percent = -1;
 
+    // Keep track of the commanded percent out
+    m_percent = percent;
+
     if(percent > 0)
     {
         m_in1.set_duty(fabs(percent));
@@ -44,3 +47,17 @@ void L298N::set_percent(double percent)
     }
 
 } // end of "set_percent(double)"
+
+
+double L298N::get_percent()
+{
+    return m_percent;
+
+} // end of "get_percent()"
+
+
+void L298N::stop()
+{
+    set_percent(0);
+
+} // end of "stop()"

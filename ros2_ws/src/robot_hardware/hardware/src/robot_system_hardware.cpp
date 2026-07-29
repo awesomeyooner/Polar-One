@@ -35,7 +35,25 @@ CallbackReturn RobotSystemHardware::on_init(const HardwareComponentInterfacePara
         StatusCode serial_init_status = m_hardware.init(field_name, description);
 
     if(serial_init_status != StatusCode::OK)
-        return CallbackReturn::ERROR;
+    {
+        bool shutdown_on_error = true;
+
+        try
+        {
+            shutdown_on_error = stoi(info_.hardware_parameters["Shutdown_on_Error"]);
+        }
+        catch(const exception& e)
+        {
+            // Do Nothing
+        }
+
+        // If flag is set, then shutdown on error
+        if(shutdown_on_error)
+            rclcpp::shutdown();
+        // If not, then just return ERROR
+        // else
+            return CallbackReturn::ERROR;
+    }
 
     return CallbackReturn::SUCCESS;
 
@@ -46,7 +64,13 @@ vector<StateInterface> RobotSystemHardware::export_state_interfaces()
 {
     vector<StateInterface> state_interfaces;
 
-    // There are none for now
+    state_interfaces.emplace_back(StateInterface("front_left_wheel_joint", HW_IF_POSITION, &drive_positions[0]));
+    state_interfaces.emplace_back(StateInterface("front_right_wheel_joint", HW_IF_POSITION, &drive_positions[1]));
+    state_interfaces.emplace_back(StateInterface("rear_left_wheel_joint", HW_IF_POSITION, &drive_positions[2]));
+    state_interfaces.emplace_back(StateInterface("rear_right_wheel_joint", HW_IF_POSITION, &drive_positions[3]));
+
+    state_interfaces.emplace_back(StateInterface("front_left_steer_joint", HW_IF_POSITION, &steer_positions[0]));
+    state_interfaces.emplace_back(StateInterface("front_right_steer_joint", HW_IF_POSITION, &steer_positions[1]));
 
     return state_interfaces;
 
@@ -74,9 +98,7 @@ CallbackReturn RobotSystemHardware::on_activate(const rclcpp_lifecycle::State & 
 {
     RCLCPP_INFO(rclcpp::get_logger("RobotSystemHardware"), "Activating ...please wait...");
     
-    // Nothing to do for now
-    
-    // 2. Configure the Servo Bounds
+    // 1. Configure the Servo Bounds
 
         // Configure the Lower and Upper bounds of the servo
         double lower_bound_radians = to_radians( std::stod(info_.hardware_parameters["Servo_Lower_Bound_Degrees"]) );

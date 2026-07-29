@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-#include "devices/timer_device.hpp"
+#include "EmbeddedLib/devices/timer_device.hpp"
 
 
 class Servo : public TimerDevice
@@ -52,6 +52,12 @@ class Servo : public TimerDevice
          * @return `double` The angle in radians 
          */
         double get_angle();
+
+        /**
+         * @brief Stops the servo (sets the duty cycle to 0)
+         * 
+         */
+        void stop();
 
     private:
 

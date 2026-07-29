@@ -27,6 +27,8 @@
 
 
 namespace robot_hardware{
+
+
     
 
 class RobotSystemHardware : public hardware_interface::SystemInterface
@@ -63,6 +65,9 @@ class RobotSystemHardware : public hardware_interface::SystemInterface
 
         double drive_commands[4] = {0, 0, 0, 0};
         double steer_commands[2] = {0, 0};
+
+        double drive_positions[4] = {0, 0, 0, 0};
+        double steer_positions[2] = {0, 0};
 
 }; // class RobotSystemHardware
 

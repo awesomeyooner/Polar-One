@@ -73,3 +73,10 @@ double Servo::get_clamped_angle(double radians)
     else
         return radians;
 }
+
+
+void Servo::stop()
+{
+    set_duty(0);
+
+} // end of "stop()"
