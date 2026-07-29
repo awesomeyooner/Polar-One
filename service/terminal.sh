@@ -27,4 +27,4 @@ docker run \
     --device-cgroup-rule='c 189:* rmw' \
     -v /dev:/dev \
     ${NAME}:${TAG} \
-    /bin/bash
+    $*
