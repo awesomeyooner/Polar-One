@@ -6,6 +6,7 @@ The base chassis of this car is the [Exceed RC 1/16 Legion Desert Monster Truck]
 
 Components:
 - NVIDIA Jetson Nano (4 GB)
+- [AR0144 Global Shutter Camera](https://www.amazon.com/dp/B0C3M52K6X?lv=shuf&channelId=500&plpRedirect=mhFallback)
 - [Tiny Thinker STM32 Board](https://github.com/awesomeyooner/Tiny-Thinker)
 - [Mango Router](https://www.gl-inet.com/en-us/products/gl-mt300n-v2?srsltid=AfmBOoqTpiGF_bX42_W4qsnrI0p_AHjo5lqIbnSPYlNqghL_682rRaWU) for Access Point
 - [DROK L298 Motor Driver](https://www.amazon.com/dp/B06XGD5SCB?ref=nb_sb_ss_w_as-reorder_k0_1_14&amp=&crid=1PV5BL7NTAXUQ&sprefix=drok%2Bmotor%2Bdri&th=1)
@@ -27,3 +28,32 @@ The `Tiny Thinker` runs the low-level hardware control for the servo and motor d
 ![ISO_irl_switch](docs/pics/ISO_irl_switch.png)
 
 ![close_up](docs/pics/close_up.png)
+
+## Setup
+
+With the docker image built, do the following to set this project up on the Jetson Nano
+
+First, setup the repository
+
+```bash
+$ git clone https://github.com/awesomeyooner/Polar-One.git && cd Polar-One
+$ git submodule update --init --recursive
+```
+
+Then build the ros2_ws
+
+```bash
+$ cd /path/to/Polar-One/service
+$ ./terminal.sh
+
+# You should now be in the docker container
+$ cd ros2_ws && colcon build --symlink-install
+$ exit
+```
+
+Then just add the `.service` file
+
+```bash
+$ cd /path/to/Polar-One/service
+$ ./setup.bash
+```
