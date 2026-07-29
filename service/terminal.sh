@@ -17,8 +17,6 @@ docker run \
     --volume "$(dirname "$(realpath "$0")")/../ros2_ws":/home/ubuntu/ros2_ws \
     --net=host \
     -e TERM=xterm-256color \
-    --volume "$(dirname "$(realpath "$0")")/entrypoint.sh":"/tmp/entrypoint.sh" \
-    --entrypoint /tmp/entrypoint.sh \
     --group-add $(getent group dialout | cut -d: -f3) \
     --group-add $(getent group tty | cut -d: -f3) \
     --group-add $(getent group video | cut -d: -f3) \
