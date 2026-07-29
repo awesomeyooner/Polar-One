@@ -2,7 +2,7 @@
 
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 
-FILE_NAME="test.service"
+FILE_NAME="polarone.service"
 
 USER="$(whoami)"
 
@@ -18,17 +18,18 @@ touch ${SCRIPT_DIR}/${FILE_NAME}
 cat << EOF > ${FILE_NAME}
 [Unit]
 Description=Main Executable for running Polar One
-Wants=network-online.target
-After=network-online.target
+Wants=network-online.target docker.service
+After=network-online.target docker.service
 StartLimitBurst=5
 
 [Service]
 User=${USER}
+WorkingDirectory=${SCRIPT_DIR}
 ExecStartPre=/bin/sleep 10
 ExecStart=${SCRIPT_DIR}/run.sh
 Restart=always
 RestartSec=5s
-Type=idle
+Type=simple
 
 [Install]
 WantedBy=multi-user.target
