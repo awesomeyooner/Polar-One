@@ -1,0 +1,16 @@
+[Unit]
+Description=Main Executable for running Polar One
+Wants=network-online.target
+After=network-online.target
+StartLimitBurst=5
+
+[Service]
+User=aaron
+ExecStartPre=/bin/sleep 10
+ExecStart=/home/aaron/Documents/GitHub/Polar-One/service/run.sh
+Restart=always
+RestartSec=5s
+Type=idle
+
+[Install]
+WantedBy=multi-user.target
