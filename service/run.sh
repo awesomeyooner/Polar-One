@@ -3,7 +3,7 @@
 NAME=ros2
 TAG=jazzy
 
-CONTAINER_NAME="my_container"
+CONTAINER_NAME="polarone-container"
 
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 
