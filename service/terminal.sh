@@ -3,12 +3,13 @@
 NAME=ros2
 TAG=jazzy
 
-CONTAINER_NAME="my_container"
+CONTAINER_NAME="polarone-terminal"
 
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 
 docker run \
     -it \
+    --init \
     --rm \
     --hostname container \
     --name ${CONTAINER_NAME} \
@@ -28,4 +29,4 @@ docker run \
     --device-cgroup-rule='c 189:* rmw' \
     -v /dev:/dev \
     ${NAME}:${TAG} \
-    ros2 launch robot_hardware main.launch.py
+    /bin/bash
